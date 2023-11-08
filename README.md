@@ -14,5 +14,12 @@ pip install -r requirements.txt
 ## 支持的第三方转发
 - OhMyGPT [查看官网地址](https://www.ohmygpt.com/)
 
+## 渠道类型说明
+- 1: 原生OpenAI
+- 2: OhMyGPT
+- 3: 所有One-API程序转发的接口
+- 4: OpenSB
+- 5: 灵石-Qwen模型接口,包括(7b,14b,plus,turbo)
+
 ## 接口文档
 - [查看接口文档](https://apifox.com/apidoc/shared-2c467c83-554d-4a60-b640-edbcc877f383)
