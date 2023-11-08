@@ -20,7 +20,7 @@ async def insert_log(messages: list, model_name: str, channel, token_info):
 
     remark = ""
     if config.use_azure_model:
-        remark = f"Azure OpenAI {model_name}"
+        remark = f"Azure OpenAI {config.azure_chat_model}"
     LogsEntity.insert_log(remark, token_info['name'], model_name, channel['id'], channel['name'],
                           request_tokens=token_num)
 
