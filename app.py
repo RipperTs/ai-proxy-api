@@ -38,8 +38,6 @@ async def proxy(request: Request, call_next):
 
         # 获取渠道信息
         channel = get_channel_info(model_name)
-        # 获取原始请求信息
-        url = f"{channel['base_url']}{request.url.path}"  # 设置目标接口的URL
         if 'host' in headers:
             del headers['host']
         # 设置代理请求头(openai的接口鉴权sk-xxx需要填写在这里)
@@ -49,13 +47,16 @@ async def proxy(request: Request, call_next):
         # 发送代理请求
         response = requests.request(
             method=request.method,
-            url=url,
+            url=f"{channel['base_url']}{request.url.path}",
             headers=headers,
             json=data,
             cookies=request.cookies,
             allow_redirects=False,
             stream=stream,
             timeout=15)
+
+        if response.status_code != 200:
+            raise Exception("请求失败")
 
         if stream:
             # 流式返回结果
