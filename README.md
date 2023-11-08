@@ -13,3 +13,6 @@ pip install -r requirements.txt
 
 ## 支持的第三方转发
 - OhMyGPT [查看官网地址](https://www.ohmygpt.com/)
+
+## 接口文档
+- [查看接口文档](https://apifox.com/apidoc/shared-2c467c83-554d-4a60-b640-edbcc877f383)
