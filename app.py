@@ -51,9 +51,9 @@ async def proxy(request: Request, call_next):
         if config.use_azure_model:
             if url_path == '/v1/chat/completions':
                 url_path = '/azure/v1/chat/completions'
-            model_name = config.azure_chat_model
             # 修改data中的model参数
-            data['model'] = model_name
+            data['model'] = config.azure_chat_model
+            model_name = f"{config.azure_chat_model}_azure" # 这里主要为了区分日志
 
         # 发送代理请求
         response = requests.request(
