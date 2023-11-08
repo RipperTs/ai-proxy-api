@@ -17,7 +17,6 @@ log/*
 application-local.properties
 rebel.xml
 LOG_DIR_IS_UNDEFINED
-data/*
 index/*
 lora.json
 ptuning.json
