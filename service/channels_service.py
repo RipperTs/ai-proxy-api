@@ -8,7 +8,7 @@ from model.po.add_channel_po import AddChannelPo
 def get_base_url(channel):
     if channel['base_url'] is None or len(channel['base_url']) == 0:
         if channel['type'] == 1:
-            return config.default_openai_base_url
+            return "https://api.openai.com"
         if channel['type'] == 2:
             return "https://api.ohmygpt.com"
         else:

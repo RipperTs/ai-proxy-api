@@ -12,7 +12,6 @@ __all__ = [
     'server_name',
     'server_port',
     'log_level',
-    'default_openai_base_url',
     'db_host',
     'db_port',
     'db_user',
@@ -36,9 +35,6 @@ logging.basicConfig(
     level=log_level,
     format="%(asctime)s [%(levelname)s] [%(filename)s:%(lineno)d] %(message)s",
 )
-
-# 默认openai配置
-default_openai_base_url = os.environ.get('DEFAULT_OPENAI_BASE_URL', 'https://api.openai.com')
 
 # 数据库配置
 db_host = os.environ.get('DB_HOST', 'localhost')
