@@ -1,3 +1,5 @@
+import logging
+
 import requests
 from fastapi import FastAPI, Request
 import json
@@ -66,6 +68,7 @@ async def proxy(request: Request, call_next):
         else:
             return Response(response.content, status_code=response.status_code, headers=dict(response.headers))
     except Exception as e:
+        logging.error(f"代理转发请求失败, {e}")
         return Response(json.dumps({"code": 500, "data": None, "message": str(e)}), status_code=200)
 
 
