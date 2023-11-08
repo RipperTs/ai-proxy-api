@@ -10,10 +10,11 @@ from handler.exception_handler import register_all_handler
 from model.po.add_channel_po import AddChannelPo
 from model.po.add_token_po import AddTokenPo
 from service.channels_service import get_channel_info, get_channel_list, get_channel_balance, do_add_channel, \
-    do_del_channel, do_change_channel_status
+    do_del_channel, do_change_channel_status, get_channel_by_id, update_channel_response_time
 from service.logs_service import insert_log, get_log_list
 from service.token_service import get_token_info, get_token_list, do_add_token, do_del_token, \
     do_change_token_status
+import time
 
 app = FastAPI()
 register_all_handler(app)
@@ -144,6 +145,36 @@ def del_token(token_id: int):
 def change_token_status(token_id: int, status: int):
     do_change_token_status(token_id, status)
     return resultSuccess(data={})
+
+
+@app.get('/ai-proxy/api/check-channel')
+def check_channel(channel_id: int):
+    try:
+        test_request_data = {'model': 'gpt-3.5-turbo', 'messages': [{'role': 'user', 'content': 'Hello!'}],
+                             'stream': False}
+        channel = get_channel_by_id(channel_id)
+        headers = {'content-type': 'application/json', 'authorization': f"Bearer {channel['key']}"}
+        # 记录开始时间
+        start_time = time.time()
+        response = requests.request(
+            method='post',
+            url=f"{channel['base_url']}/v1/chat/completions",
+            headers=headers,
+            json=test_request_data,
+            allow_redirects=False,
+            timeout=15)
+        # 计算响应时间, 单位ms
+        response_time = int((time.time() - start_time) * 1000)
+        update_channel_response_time(channel_id, response_time)
+        if response.status_code != 200:
+            raise Exception("请求失败, 请检查渠道地址是否正确")
+        return resultSuccess(data={
+            "response_time": response_time,
+            "response": response.json()
+        })
+
+    except Exception as e:
+        return resultError(msg=str(e))
 
 
 if __name__ == '__main__':

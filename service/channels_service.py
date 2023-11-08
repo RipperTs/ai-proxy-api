@@ -5,19 +5,23 @@ import requests
 from model.po.add_channel_po import AddChannelPo
 
 
+def get_base_url(channel):
+    if channel['base_url'] is None or len(channel['base_url']) == 0:
+        if channel['type'] == 1:
+            return config.default_openai_base_url
+        if channel['type'] == 2:
+            return "https://api.ohmygpt.com"
+        else:
+            raise Exception("渠道地址不存在")
+    return channel['base_url']
+
+
 def get_channel_info(model_name: str):
     channel = ChannelsEntity.get_by_model(model_name)
     if channel is None:
         raise Exception("渠道不存在")
 
-    if channel['base_url'] is None or len(channel['base_url']) == 0:
-        if channel['type'] == 1:
-            channel['base_url'] = config.default_openai_base_url
-        if channel['type'] == 2:
-            channel['base_url'] = "https://api.ohmygpt.com"
-        else:
-            raise Exception("渠道地址不存在")
-
+    channel['base_url'] = get_base_url(channel)
     return channel
 
 
@@ -72,4 +76,17 @@ def do_change_channel_status(channel_id, status):
     if channel is None:
         raise Exception("渠道不存在")
     ChannelsEntity.update(status=status).where(ChannelsEntity.id == channel_id).execute()
+    return True
+
+
+def get_channel_by_id(channel_id):
+    channel = ChannelsEntity.get_channel_by_id(channel_id)
+    if channel is None:
+        raise Exception("渠道不存在")
+    channel['base_url'] = get_base_url(channel)
+    return channel
+
+
+def update_channel_response_time(channel_id, response_time):
+    ChannelsEntity.update(response_time=response_time).where(ChannelsEntity.id == channel_id).execute()
     return True
