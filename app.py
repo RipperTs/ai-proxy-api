@@ -166,7 +166,7 @@ def check_channel(channel_id: int):
         response_time = int((time.time() - start_time) * 1000)
         update_channel_response_time(channel_id, response_time)
         if response.status_code != 200:
-            raise Exception("请求失败, 请检查渠道地址是否正确")
+            raise Exception(f"请求失败, {response.text}")
         return resultSuccess(data={
             "response_time": response_time,
             "response": response.json()
