@@ -43,8 +43,6 @@ async def proxy(request: Request, call_next):
             del headers['host']
         # 设置代理请求头(openai的接口鉴权sk-xxx需要填写在这里)
         headers['authorization'] = f"Bearer {channel['key']}"
-        # 记录请求日志, 异步调用insert_log方法
-        await insert_log(data.get('messages', []), model_name, channel, token_info)
         # 发送代理请求
         response = requests.request(
             method=request.method,
@@ -59,6 +57,8 @@ async def proxy(request: Request, call_next):
         if response.status_code != 200:
             raise Exception("请求失败")
 
+        # 记录请求日志, 异步调用insert_log方法
+        await insert_log(data.get('messages', []), model_name, channel, token_info)
         if stream:
             # 流式返回结果
             return StreamingResponse(response.iter_content(chunk_size=1024), status_code=response.status_code,
