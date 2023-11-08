@@ -161,7 +161,7 @@ def check_channel(channel_id: int):
             headers=headers,
             json=test_request_data,
             allow_redirects=False,
-            timeout=15)
+            timeout=10)
         # 计算响应时间, 单位ms
         response_time = int((time.time() - start_time) * 1000)
         update_channel_response_time(channel_id, response_time)
