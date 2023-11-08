@@ -19,7 +19,6 @@ pip install -r requirements.txt
 - 2: OhMyGPT
 - 3: 所有One-API程序转发的接口
 - 4: OpenSB
-- 5: 灵石-Qwen模型接口,包括(7b,14b,plus,turbo)
 
 ## 接口文档
 - [查看接口文档](https://apifox.com/apidoc/shared-2c467c83-554d-4a60-b640-edbcc877f383)

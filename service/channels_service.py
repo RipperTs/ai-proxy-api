@@ -11,6 +11,8 @@ def get_base_url(channel):
             return "https://api.openai.com"
         if channel['type'] == 2:
             return "https://api.ohmygpt.com"
+        if channel['type'] == 4:
+            return "https://api.openai-sb.com"
         else:
             raise Exception("渠道地址不存在")
     return channel['base_url']
