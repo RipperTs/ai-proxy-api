@@ -27,6 +27,7 @@ async def proxy(request: Request, call_next):
     if request.url.path.startswith("/ai-proxy"):
         return await call_next(request)
     try:
+        url_path  = request.url.path
         headers = dict(request.headers)
         token_info = get_token_info(headers['authorization'])
         # 获取body中的参数
@@ -45,10 +46,19 @@ async def proxy(request: Request, call_next):
             del headers['host']
         # 设置代理请求头(openai的接口鉴权sk-xxx需要填写在这里)
         headers['authorization'] = f"Bearer {channel['key']}"
+
+        # 如果使用azure模型, 则将请求路径修改为azure的路径
+        if config.use_azure_model:
+            if url_path == '/v1/chat/completions':
+                url_path = '/azure/v1/chat/completions'
+            model_name = config.azure_chat_model
+            # 修改data中的model参数
+            data['model'] = model_name
+
         # 发送代理请求
         response = requests.request(
             method=request.method,
-            url=f"{channel['base_url']}{request.url.path}",
+            url=f"{channel['base_url']}{url_path}",
             headers=headers,
             json=data,
             cookies=request.cookies,
