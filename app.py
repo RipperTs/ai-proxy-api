@@ -38,6 +38,7 @@ async def proxy(request: Request, call_next):
         model_name = data.get('model', '')
 
         if model_name is None or len(model_name) == 0:
+            logging.error("model参数不能为空")
             raise Exception("model参数不能为空")
 
         # 获取渠道信息
@@ -63,7 +64,7 @@ async def proxy(request: Request, call_next):
             cookies=request.cookies,
             allow_redirects=False,
             stream=stream,
-            timeout=10)
+            timeout=10 if stream else 120)
 
         if response.status_code != 200:
             raise Exception("请求失败")
@@ -186,6 +187,7 @@ def check_channel(channel_id: int):
         })
 
     except Exception as e:
+        logging.error(f"检测渠道失败, {e}")
         return resultError(msg=str(e))
 
 
