@@ -21,8 +21,8 @@
           align="center"
           label="状态">
           <template slot-scope="scope">
-            <el-tag type="success" class="cursor" v-if="scope.row.status === 1">已启用</el-tag>
-            <el-tag type="danger" class="cursor" v-else>已禁用</el-tag>
+            <el-tag type="success" class="cursor" @click="setStatus(scope.row,2)" v-if="scope.row.status === 1">已启用</el-tag>
+            <el-tag type="danger" class="cursor" @click="setStatus(scope.row,1)" v-else>已禁用</el-tag>
           </template>
         </el-table-column>
         <el-table-column
@@ -105,6 +105,13 @@ export default {
   mounted() {
   },
   methods: {
+
+    setStatus(row, status) {
+      this.isLoading = true
+      _apiGet(`/api/token/${row.id}/status`, {status: status}).then(res => {
+        this.getTokenList()
+      })
+    },
 
     currentChange(e){
       this.page = e
