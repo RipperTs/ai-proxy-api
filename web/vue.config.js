@@ -17,7 +17,7 @@ module.exports = {
     // If you want to turn on the proxy, please remove the mockjs /src/main.jsL11
     proxy: {
       '/web': {
-        target: 'http://127.0.0.1:3000/', // target host
+        target: 'http://23.224.125.68:3001/', // target host
         ws: true, // proxy websockets
         changeOrigin: true, // needed for virtual hosted sites
         pathRewrite: {

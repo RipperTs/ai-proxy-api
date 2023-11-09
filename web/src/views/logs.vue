@@ -10,16 +10,22 @@
         :header-cell-style="{background: '#f3f3f3',fontWeight: 'bold',fontSize: '14px'}"
         style="width: 100%">
         <el-table-column
-          prop="token_name"
           label="令牌">
+          <template slot-scope="scope">
+            <el-tag>{{ scope.row.token_name }}</el-tag>
+          </template>
         </el-table-column>
         <el-table-column
-          prop="channel_name"
           label="渠道名称">
+          <template slot-scope="scope">
+            <el-tag effect="plain" type="warning">{{ scope.row.channel_name }}</el-tag>
+          </template>
         </el-table-column>
         <el-table-column
-          prop="model_name"
           label="模型名称">
+          <template slot-scope="scope">
+            <el-tag effect="plain" type="success">{{ scope.row.model_name }}</el-tag>
+          </template>
         </el-table-column>
         <el-table-column
           prop="request_tokens"
@@ -28,9 +34,13 @@
         </el-table-column>
         <el-table-column
           prop="created_time"
-          width="180"
           align="center"
+          width="200"
           label="创建时间">
+        </el-table-column>
+        <el-table-column
+          prop="content"
+          label="备注">
         </el-table-column>
       </el-table>
       <div class="pagination">
