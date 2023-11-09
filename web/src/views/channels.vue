@@ -14,6 +14,7 @@
         style="width: 100%">
         <el-table-column
           prop="name"
+          width="200"
           label="名称">
         </el-table-column>
         <el-table-column
@@ -52,7 +53,7 @@
           label="创建时间">
         </el-table-column>
         <el-table-column
-          width="130"
+          width="150"
           align="center"
           label="请求耗时">
           <template slot-scope="scope">
@@ -61,9 +62,7 @@
           </template>
         </el-table-column>
         <el-table-column
-          fixed="right"
-          label="操作"
-          width="380">
+          label="操作">
           <template slot-scope="scope">
             <el-button @click="testChannel(scope.row)" size="mini">测试</el-button>
             <el-button type="success" @click="copyKey(scope.row)" size="mini">复制</el-button>
@@ -77,6 +76,7 @@
       <div class="pagination">
         <el-pagination
           background
+          @current-change="currentChange"
           :page-size.sync="limit"
           :current-page.sync="page"
           layout="prev, pager, next"
@@ -144,6 +144,11 @@ export default {
   mounted() {
   },
   methods: {
+
+    currentChange(e){
+      this.page = e
+      this.getChannelsList()
+    },
 
     copyKey(row){
       this.$copyText(row.key)

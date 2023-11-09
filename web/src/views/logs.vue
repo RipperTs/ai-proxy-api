@@ -1,26 +1,113 @@
 <template>
-  <div>
-    <h1>日志</h1>
+  <div class="container">
+    <div class="table-box">
+      <el-table
+        :data="tableData"
+        height="700"
+        stripe
+        border
+        v-loading="isLoading"
+        :header-cell-style="{background: '#f3f3f3',fontWeight: 'bold',fontSize: '14px'}"
+        style="width: 100%">
+        <el-table-column
+          prop="token_name"
+          label="令牌">
+        </el-table-column>
+        <el-table-column
+          prop="channel_name"
+          label="渠道名称">
+        </el-table-column>
+        <el-table-column
+          prop="model_name"
+          label="模型名称">
+        </el-table-column>
+        <el-table-column
+          prop="request_tokens"
+          width="200"
+          label="请求token">
+        </el-table-column>
+        <el-table-column
+          prop="created_time"
+          width="180"
+          align="center"
+          label="创建时间">
+        </el-table-column>
+      </el-table>
+      <div class="pagination">
+        <el-pagination
+          background
+          @current-change="currentChange"
+          :page-size.sync="limit"
+          :current-page.sync="page"
+          layout="prev, pager, next"
+          :total="100">
+        </el-pagination>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import {_apiGet} from "@/api/api";
+
 export default {
-  components: { },
+  components: {},
   data() {
     return {
-
+      tableData: [],
+      page: 1,
+      limit: 30,
+      isLoading: true
     }
   },
-  computed: { },
-  watch: { },
-  created() { },
-  mounted() { },
-  methods: { },
+  created() {
+    this.getLogs()
+  },
+  methods: {
 
-  destroyed() { },
+    getLogs() {
+      _apiGet('/api/log-list', {page: this.page, limit: this.limit}).then(res => {
+        this.tableData = res.data
+        this.isLoading = false
+      }).catch(() => {
+        this.isLoading = false
+      })
+    },
+
+    currentChange(e) {
+      this.page = e
+      this.getLogs()
+    },
+  },
 }
 </script>
 <style lang="scss" scoped>
+.table-box {
+  margin-top: 30px;
+  min-height: 700px;
+  border-radius: 5px;
+}
 
+.cursor {
+  cursor: pointer;
+}
+
+.pagination {
+  margin-top: 10px;
+  background: #fff;
+  padding: 10px;
+  border-radius: 4px;
+  box-shadow: 0 0 10px #eee;
+}
+
+.el-table {
+  border-radius: 4px;
+  border: none;
+  box-shadow: 0 0 10px #eee;
+}
+
+
+.input-width {
+  width: 450px;
+}
 </style>
