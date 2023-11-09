@@ -195,4 +195,4 @@ def check_channel(channel_id: int):
 if __name__ == '__main__':
     import uvicorn
 
-    uvicorn.run(app, host=config.server_name, port=config.server_port)
+    uvicorn.run(app='app:app', host=config.server_name, port=config.server_port, workers=4, reload=False)
