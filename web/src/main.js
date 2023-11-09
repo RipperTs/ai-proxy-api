@@ -9,6 +9,8 @@ import './assets/icons' // icon
 import {updateElementTheme} from "@/common/update-element-theme";
 import Storage from 'vue-ls'
 import Base from "@/utils/base";
+import './assets/css/global.scss'
+import VueClipboard from "vue-clipboard2";
 
 Vue.config.productionTip = false;
 
@@ -20,6 +22,7 @@ const storageOptions = {
   storage: 'local'     // 作用范围：local、session、memory
 }
 
+Vue.use(VueClipboard);
 Vue.use(Storage, storageOptions)
 Vue.use(Vant);
 Vue.use(ElementUI, {size: 'small'});

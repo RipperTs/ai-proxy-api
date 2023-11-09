@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Header :user_info="user_info" v-if="isShowGlobalModule"></Header>
-    <router-view style="margin-top: 60px;"/>
+    <router-view />
   </div>
 </template>
 <script>
@@ -27,4 +27,5 @@ export default {
   },
 }
 </script>
+
 

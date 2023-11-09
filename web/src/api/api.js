@@ -10,16 +10,17 @@ import {Message} from 'element-ui';
  */
 export function _apiGet(url, params) {
   return new Promise((resolve, reject) => {
-    url = '/ai-proxy/' + url
+    url = '/web/ai-proxy' + url
     axios.get(url, {
       params: params
     }).then(res => {
       if (res.status !== 200) {
         console.error('接口请求失败: ', res)
-        Message.error(res.data.message);
+        Message.error(res.data.msg);
         return;
       }
-      if (res.data.code !== 200) {
+      if (res.data.code !== 0) {
+        Message.error(res.data.msg);
         reject(res.data)
         return;
       }
@@ -40,13 +41,14 @@ export function _apiGet(url, params) {
  */
 export function _apiPost(url, data) {
   return new Promise((resolve, reject) => {
-    url = '/ai-proxy/' + url
+    url = '/web/ai-proxy' + url
     axios.post(url, data).then(res => {
       if (res.status !== 200) {
-        Message.error(res.data.message);
+        Message.error(res.data.msg);
         return;
       }
-      if (res.data.code !== 200) {
+      if (res.data.code !== 0) {
+        Message.error(res.data.msg);
         reject(res.data)
         return;
       }

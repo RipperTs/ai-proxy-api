@@ -16,12 +16,12 @@ module.exports = {
     port: 8081,
     // If you want to turn on the proxy, please remove the mockjs /src/main.jsL11
     proxy: {
-      '/ai-proxy': {
+      '/web': {
         target: 'http://127.0.0.1:3000/', // target host
         ws: true, // proxy websockets
         changeOrigin: true, // needed for virtual hosted sites
         pathRewrite: {
-          '^/ai-proxy': '' // rewrite path
+          '^/web': '' // rewrite path
         }
       }
     }

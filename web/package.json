@@ -20,6 +20,7 @@
     "element-ui": "^2.15.6",
     "lodash": "^4.17.21",
     "vue": "^2.6.13",
+    "vue-clipboard2": "^0.3.3",
     "vue-ls": "^4.2.0",
     "vue-router": "^3.5.3",
     "vue-template-compiler": "^2.6.13",
