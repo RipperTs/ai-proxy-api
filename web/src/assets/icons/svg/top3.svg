@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="22px" height="20px" viewBox="0 0 22 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 60.1 (88133) - https://sketch.com -->
+    <title>传播指数top1备份 2</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="89.7047834%" y1="6.34322474%" x2="37.2930616%" y2="99.2477829%" id="linearGradient-1">
+            <stop stop-color="#FFEBD4" offset="0%"></stop>
+            <stop stop-color="#BF7C1F" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="78.498486%" y1="0%" x2="34.1335268%" y2="93.1104404%" id="linearGradient-2">
+            <stop stop-color="#FFEBD4" offset="0%"></stop>
+            <stop stop-color="#BF7C1F" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="85.7901607%" y1="46.6281168%" x2="35.2074295%" y2="55.4277854%" id="linearGradient-3">
+            <stop stop-color="#FFEBD4" offset="0%"></stop>
+            <stop stop-color="#BF7C1F" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="83.1760373%" y1="44.4893099%" x2="31.5293098%" y2="54.7513655%" id="linearGradient-4">
+            <stop stop-color="#FFEBD4" offset="0%"></stop>
+            <stop stop-color="#BF7C1F" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="关联分析" transform="translate(-729.000000, -957.000000)" fill-rule="nonzero">
+            <g id="编组-21" transform="translate(104.000000, 829.000000)">
+                <g id="编组-11" transform="translate(624.000000, 50.000000)">
+                    <g id="传播指数top1备份-2" transform="translate(0.000000, 76.000000)">
+                        <rect id="Rectangle-8" fill="#000000" opacity="0" x="0" y="0" width="24" height="24"></rect>
+                        <g id="trophy" transform="translate(2.769231, 2.769231)" stroke-width="1.65789474">
+                            <path d="M3.75789474,8.5145978 L3.75789474,3.83623523 L0,3.83623523 C0,6.95514362 1.87894737,8.5145978 3.75789474,8.5145978 Z" id="路径" stroke="#BF7C1F" fill="#BF7C1F" opacity="0.600659" stroke-linecap="round"></path>
+                            <path d="M15.0315789,8.5145978 L15.0315789,3.83623523 L18.7894737,3.83623523 C18.7894737,6.95514362 16.9105263,8.5145978 15.0315789,8.5145978 Z" id="路径" stroke="#BF7C1F" fill="#BF7C1F" opacity="0.600659" stroke-linecap="round"></path>
+                            <path d="M9.39473684,12.7251241 C12.5078788,12.7251241 15.0315789,10.1377089 15.0315789,6.94597034 L15.0315789,0.56138142 L3.75789474,0.56138142 L3.75789474,6.94597034 C3.75789474,10.1377089 6.28159491,12.7251241 9.39473684,12.7251241 Z" id="路径" stroke="url(#linearGradient-2)" fill="url(#linearGradient-1)"></path>
+                            <line x1="9.39473684" y1="13.6607966" x2="9.39473684" y2="15.5321416" id="路径" stroke="#BF7C1F" fill="#BF7C1F" opacity="0.600659" stroke-linecap="round"></line>
+                            <polygon id="路径" stroke="url(#linearGradient-4)" fill="url(#linearGradient-3)" points="5.16710526 18.3391592 6.90045112 15.5321417 11.7633923 15.5321417 13.6223684 18.3391592"></polygon>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

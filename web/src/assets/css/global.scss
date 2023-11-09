@@ -1,0 +1,159 @@
+$system-main-color: #ae3036;
+
+* {
+  box-sizing: border-box;
+  font-family: Roboto, sans-serif;
+  outline: none !important;
+  -webkit-font-smoothing: antialiased;
+  // 优化滚动条
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+    display: none;
+  }
+}
+
+html,
+body,
+#app {
+  padding: 0;
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
+
+.mt-0 {
+  margin-top: 0 !important;
+}
+
+.mt-10 {
+  margin-top: 10px !important;
+}
+
+.fw-500 {
+  font-weight: 500 !important;
+}
+
+.container {
+  padding-top: 55px;
+}
+
+.ml-5 {
+  margin-left: 5px;
+}
+
+.ml-10 {
+  margin-left: 10px;
+}
+
+.justify-between {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.heng {
+  height: 60px;
+}
+
+
+.dialog-box {
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+    display: block;
+  }
+
+  ::-webkit-scrollbar-thumb { //滚动条小方块样式
+    -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    background: #c0c3c7;
+  }
+
+  ::-webkit-scrollbar-track { //滚动条滚动轴样式
+    -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    background: #EDEDED;
+  }
+}
+
+
+.widget_tags .tagbgc0 a {
+  background-color: #4a4a4a
+}
+
+.widget_tags .tagbgc0 {
+  box-shadow: 1px 2px 8px rgba(74, 74, 74, 0.9);
+}
+
+.widget_tags .tagbgc1 a {
+  background-color: #4689ee
+}
+
+.widget_tags .tagbgc1 {
+  box-shadow: 1px 2px 8px rgba(70, 137, 238, 0.9);
+}
+
+.widget_tags .tagbgc2 a {
+  background-color: #5da25d
+}
+
+.widget_tags .tagbgc2 {
+  box-shadow: 1px 2px 8px rgba(93, 162, 93, 0.9);
+}
+
+.widget_tags .tagbgc3 a {
+  background-color: #d9534f
+}
+
+.widget_tags .tagbgc3 {
+  box-shadow: 1px 2px 8px rgba(217, 83, 79, 0.9);
+}
+
+.widget_tags .tagbgc4 a {
+  background-color: #567e95
+}
+
+.widget_tags .tagbgc4 {
+  box-shadow: 1px 2px 8px rgba(86, 126, 149, 0.9);
+}
+
+.widget_tags .tagbgc5 a {
+  background-color: #cc569e
+}
+
+.widget_tags .tagbgc5 {
+  box-shadow: 1px 2px 8px rgba(204, 86, 158, 0.9);
+}
+
+.widget_tags .tagbgc6 a {
+  background-color: #00aba9
+}
+
+.widget_tags .tagbgc6 {
+  box-shadow: 1px 2px 8px rgba(0, 171, 169, 0.9);
+}
+
+.widget_tags .tagbgc7 a {
+  background-color: #b37333
+}
+
+.widget_tags .tagbgc7 {
+  box-shadow: 1px 2px 8px rgba(179, 115, 51, 0.9);
+}
+
+.widget_tags .tagbgc8 a {
+  background-color: #f60
+}
+
+.widget_tags .tagbgc8 {
+  box-shadow: 1px 2px 8px rgba(255, 102, 0, 0.9);
+}
+
+.widget_tags .tagbgc9 a {
+  background-color: #e1b01b
+}
+
+.widget_tags .tagbgc9 {
+  box-shadow: 1px 2px 8px rgba(225, 176, 27, 0.9);
+}
