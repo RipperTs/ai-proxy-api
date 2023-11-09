@@ -1,7 +1,7 @@
 import VueRouter from 'vue-router'
 import Vue from 'vue'
 
-const title = 'Meeting Minutes'
+const title = 'Proxy API'
 
 Vue.use(VueRouter)
 var routes = [
