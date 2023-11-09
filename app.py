@@ -27,7 +27,7 @@ async def proxy(request: Request, call_next):
     if request.url.path.startswith("/ai-proxy"):
         return await call_next(request)
     try:
-        url_path  = request.url.path
+        url_path = request.url.path
         headers = dict(request.headers)
         token_info = get_token_info(headers['authorization'])
         # 获取body中的参数
@@ -163,9 +163,10 @@ def change_token_status(token_id: int, status: int):
 @app.get('/ai-proxy/api/check-channel')
 def check_channel(channel_id: int):
     try:
-        test_request_data = {'model': 'gpt-3.5-turbo', 'messages': [{'role': 'user', 'content': 'Hello!'}],
-                             'stream': False}
         channel = get_channel_by_id(channel_id)
+        test_request_data = {'messages': [{'role': 'user', 'content': 'Hello!'}],
+                             'stream': False}
+        test_request_data['model'] = channel['models'].split(',')[0]
         headers = {'content-type': 'application/json', 'authorization': f"Bearer {channel['key']}"}
         # 记录开始时间
         start_time = time.time()
