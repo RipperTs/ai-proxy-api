@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1>暂无内容</h1>
+    <h3>待开发...</h3>
   </div>
 </template>
 
