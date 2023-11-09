@@ -1,7 +1,6 @@
 <template>
   <div class="container">
-    <Header menu-name="/about"></Header>
-    <h1>/about</h1>
+    <h1>暂无内容</h1>
   </div>
 </template>
 
