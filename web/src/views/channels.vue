@@ -64,8 +64,7 @@
         <el-table-column
           label="操作">
           <template slot-scope="scope">
-            <el-button @click="testChannel(scope.row)" size="mini">测试</el-button>
-            <el-button type="success" @click="copyKey(scope.row)" size="mini">复制</el-button>
+            <el-button type="success" @click="testChannel(scope.row)" size="mini">测试</el-button>
             <el-button type="warning" @click="updateBalance(scope.row)" size="mini">更新余额
             </el-button>
             <el-button type="primary" size="mini" disabled>编辑</el-button>
@@ -148,16 +147,6 @@ export default {
     currentChange(e){
       this.page = e
       this.getChannelsList()
-    },
-
-    copyKey(row){
-      this.$copyText(row.key)
-        .then(() => {
-          this.$message.success('秘钥已成功复制到剪贴板')
-        })
-        .catch(() => {
-          this.$message.error('复制失败')
-        });
     },
 
     getChannelsList() {
