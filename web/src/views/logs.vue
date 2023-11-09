@@ -3,7 +3,7 @@
     <div class="table-box">
       <el-table
         :data="tableData"
-        height="700"
+        height="720"
         stripe
         border
         v-loading="isLoading"
@@ -50,7 +50,7 @@
           :page-size.sync="limit"
           :current-page.sync="page"
           layout="prev, pager, next"
-          :total="100">
+          :total="5000">
         </el-pagination>
       </div>
     </div>
