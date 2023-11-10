@@ -14,14 +14,14 @@
         style="width: 100%">
         <el-table-column
           prop="name"
-          width="200"
+          width="160"
           label="名称">
         </el-table-column>
         <el-table-column
           prop="type"
           label="类型"
           align="center"
-          width="140">
+          width="120">
           <template slot-scope="scope">
             <el-tag effect="plain" type="success" v-if="scope.row.type === 1">OpenAI</el-tag>
             <el-tag effect="plain" type="warning" v-if="scope.row.type === 2">OhMyGPT</el-tag>
@@ -44,7 +44,7 @@
         <el-table-column
           label="余额"
           align="center"
-          width="100">
+          width="80">
           <template slot-scope="scope">
             <span>{{ scope.row.balance / 100 }}</span>
           </template>
