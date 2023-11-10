@@ -36,10 +36,9 @@ def get_channel_balance(channel_id):
     balance = 0
     channel = ChannelsEntity.get_channel_by_id(channel_id)
     if channel['type'] == 2:
-        base_url = channel.get('base_url', 'https://api.ohmygpt.com')
-        req = requests.post(f"{base_url}/api/v1/user/admin/balance",
+        req = requests.post("https://api.ohmygpt.com/api/v1/user/admin/balance",
                             headers={"authorization": "Bearer " + channel['key']},
-                            timeout=10).json()
+                            timeout=15).json()
         if req['statusCode'] == 200:
             balance = int((float(req['data']['balance']) / 34000) * 100)
 
