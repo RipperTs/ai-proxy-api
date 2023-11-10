@@ -14,7 +14,11 @@ async def insert_log(messages: list, model_name: str, channel, token_info):
     """
     content = ''
     for message in messages:
-        content += message['content']
+        if isinstance(message['content'], str):
+            content += message['content']
+        elif isinstance(message['content'], list):
+            for item in message['content']:
+                content += item.get('text', '')
 
     token_num = num_tokens_from_string(content)
 
