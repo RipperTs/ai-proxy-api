@@ -6,7 +6,7 @@ from model.po.add_token_po import AddTokenPo
 from utils.tiktokens import generate_random_string
 
 
-def get_token_info(bearer_token):
+async def get_token_info(bearer_token):
     token_with_sk = re.search(r'Bearer (.+)', bearer_token).group(1)
     token_without_sk = token_with_sk.replace("sk-", "")
     token_info = TokensEntity.get_by_key(token_without_sk)

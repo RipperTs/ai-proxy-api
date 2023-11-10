@@ -10,6 +10,8 @@ import time
 from starlette import status
 from starlette.responses import JSONResponse
 
+from service.proxy_service import do_proxy
+
 
 def register_all_handler(app: FastAPI):
     """
@@ -19,6 +21,7 @@ def register_all_handler(app: FastAPI):
     """
     register_exception(app)
     register_cors(app)
+    register_middleware(app)
 
 
 def register_exception(app: FastAPI):
@@ -77,3 +80,17 @@ def register_cors(app: FastAPI):
         allow_methods=["*"],
         allow_headers=["*"],
     )
+
+
+def register_middleware(app: FastAPI):
+    """
+    请求响应拦截
+    :param app:
+    :return:
+    """
+
+    @app.middleware("http")
+    async def proxy(request: Request, call_next):
+        if request.url.path.startswith("/ai-proxy"):
+            return await call_next(request)
+        return await do_proxy(request)

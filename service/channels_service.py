@@ -18,7 +18,7 @@ def get_base_url(channel):
     return channel['base_url']
 
 
-def get_channel_info(model_name: str):
+async def get_channel_info(model_name: str):
     channel = ChannelsEntity.get_by_model(model_name)
     if channel is None:
         raise Exception("渠道不存在")
