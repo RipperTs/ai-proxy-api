@@ -67,7 +67,7 @@ async def proxy(request: Request, call_next):
             cookies=request.cookies,
             allow_redirects=False,
             stream=stream,
-            timeout=10 if stream else 300)
+            timeout=30 if stream else 300)
 
         if response.status_code != 200:
             raise Exception("请求失败")
