@@ -30,13 +30,10 @@ async def proxy(request: Request, call_next):
         url_path = request.url.path
         headers = dict(request.headers)
         token_info = get_token_info(headers['authorization'])
-        # 获取请求的参数
-        if headers['content-type'] == 'application/json':
-            data = await request.json()
-        else:
-            data = await request.form()
-            data = dict(data)
-
+        # 获取body中的参数
+        data = await request.body()
+        # 将字节类型的data转换为json
+        data = json.loads(data)
         stream = data.get('stream', False)
         model_name = data.get('model', '')
 
@@ -63,7 +60,7 @@ async def proxy(request: Request, call_next):
             method=request.method,
             url=f"{channel['base_url']}{url_path}",
             headers=headers,
-            data=json.dumps(data) if headers['content-type'] == 'application/json' else data,
+            json=data,
             cookies=request.cookies,
             allow_redirects=False,
             stream=stream,
