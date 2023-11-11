@@ -38,7 +38,7 @@ class ChannelsEntity(Model):
         :return:
         """
         try:
-            result = self.select().where(self.models.contains(model)).where(self.status == 1).order_by(
+            result = self.select().where(fn.find_in_set(model, self.models)).where(self.status == 1).order_by(
                 fn.Rand()).dicts().limit(1)
             if len(result) > 0:
                 return result[0]
@@ -76,7 +76,3 @@ class ChannelsEntity(Model):
             return None
         finally:
             db.close()
-
-
-if __name__ == '__main__':
-    print(ChannelsEntity.get_channel_by_id(2))
