@@ -60,12 +60,12 @@ async def do_proxy(request: Request):
         )
         r = await client.send(req, stream=True, follow_redirects=False)
         if r.status_code != 200:
-            raise Exception("请求失败")
+            raise Exception(f"请求失败, 状态码: {r.status_code}")
 
         await insert_log(data.get('messages', []), model_name, channel, token_info)
         return StreamingResponse(r.aiter_raw(), background=BackgroundTask(r.aclose),
                                  status_code=r.status_code, headers=dict(r.headers), media_type='text/event-stream')
 
     except Exception as e:
-        logging.error(f"代理转发请求失败, {e}")
+        logging.error(f"代理转发请求失败, 错误信息: {e}")
         return Response(json.dumps({"code": 500, "data": None, "message": str(e)}), status_code=200)
