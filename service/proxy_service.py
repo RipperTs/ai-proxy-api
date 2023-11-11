@@ -49,6 +49,7 @@ async def do_proxy(request: Request):
             # 修改data中的model参数
             data['model'] = config.azure_chat_model
 
+        logging.warning(f"代理请求: {channel['base_url']}{url_path}, 模型: {model_name}, azure: {config.use_azure_model}")
         req = client.build_request(
             method=request.method,
             url=f"{channel['base_url']}{url_path}",
