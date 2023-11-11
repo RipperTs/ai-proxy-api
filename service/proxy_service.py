@@ -58,7 +58,7 @@ async def do_proxy(request: Request):
             cookies=request.cookies,
             timeout=20.0 if stream else 300.0
         )
-        r = await client.send(req, stream=True, follow_redirects=False)
+        r = await client.send(req, stream=True)
         if r.status_code != 200:
             raise Exception(f"请求失败, 状态码: {r.status_code}")
 
