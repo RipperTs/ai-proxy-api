@@ -1,8 +1,10 @@
 # 转发API (AI接口服务中间件)
-> 类似`one-api`的项目,但是未作计费,仅做接口转发,支持多种第三方接口转发. 尽最大可能免去频繁适配第三方接口的烦恼.
+> 打造统一的AI接口服务中间件, 通过统一的接口, 转发到各个AI接口服务, 从而实现统一管理, 降低接口适配成本.
+
+> 接口全部统一继承使用OpenAI的接口规范, 以便于后续模型的迁移, **但返回参数需要根据各个接口服务的返回参数进行适配.**
+
 
 ## 项目初始化
-
 - 安装依赖
 ```bash
 pip install -r requirements.txt
@@ -20,8 +22,20 @@ pip install -r requirements.txt
 ## 项目架构
  ![image](./docs/img.png)
 
-打造统一的AI接口服务中间件, 通过统一的接口, 转发到各个AI接口服务, 从而实现统一管理, 降低接口适配成本.
-
+### 适配进度
+- [x] `OpenAI`Chat接口
+- [x] `OpenAI`Embedding接口
+- [x] `OpenAI`Images接口
+- [x] `OpenAI`Audio接口
+- [x] `OpenAI`TTS接口
+- [ ] `OpenAI`工具/插件
+- [x] `OpenAI`Assistants接口(待测试)
+- [ ] `Discord`MidJourney绘图接口
+- [ ] `Anthropic`Claude2接口
+- [x] `阿里灵石`Qwen系列接口(qwen-7b/14b/plus)
+- [x] `本地模型`ChatGLM3接口(待开放外网访问权限)
+- [ ] `ZhiPu.AI`Chat接口
+- [ ] `ZhiPu.AI`Embedding接口
 
 ## 接口文档
 - [查看接口文档](https://apifox.com/apidoc/shared-2c467c83-554d-4a60-b640-edbcc877f383)
