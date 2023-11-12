@@ -26,10 +26,13 @@
         <div class="about-box">{{ user_info?.username }}</div>
         <div class="about-box">
           <el-dropdown :hide-on-click="false" @command="command">
-            <el-avatar style="width: 30px;height: 30px" :src="'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'">
+            <el-avatar style="width: 30px;height: 30px"
+                       :src="'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'">
               <template #default>user</template>
             </el-avatar>
             <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item icon="el-icon-unlock" command="updatePwd">更改密码
+              </el-dropdown-item>
               <el-dropdown-item icon="el-icon-switch-button" command="signOut">退出登录
               </el-dropdown-item>
             </el-dropdown-menu>
@@ -37,12 +40,34 @@
         </div>
       </div>
     </div>
+
+    <el-dialog title="更改密码" :visible.sync="dialogFormVisible">
+      <el-form :model="form">
+        <el-form-item label="旧密码" :label-width="formLabelWidth">
+          <el-input v-model="form.old_password" show-password style="width:300px" type="password"
+                    autocomplete="on"></el-input>
+        </el-form-item>
+        <el-form-item label="更改密码" :label-width="formLabelWidth">
+          <el-input v-model="form.new_password" type="password" show-password style="width:300px"
+                    autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="再次确认" :label-width="formLabelWidth">
+          <el-input v-model="form.re_password" type="password" show-password style="width:300px"
+                    autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="onSubmit()">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 
 import router from "@/router";
+import {_apiPost} from "@/api/api";
 
 export default {
   name: "Header",
@@ -56,6 +81,13 @@ export default {
     return {
       router: router.options.routes,
       menuName: '/',
+      dialogFormVisible: false,
+      form: {
+        email: '',
+        'old_password': '',
+        new_password: '',
+      },
+      formLabelWidth: '100px'
     }
   },
   computed: {
@@ -64,6 +96,9 @@ export default {
         signOut: () => {
           this.signOut();
         },
+        updatePwd: () => {
+          this.dialogFormVisible = true
+        },
       };
     },
     user_info() {
@@ -71,6 +106,36 @@ export default {
     },
   },
   methods: {
+
+    onSubmit() {
+      if (this.form.old_password.trim() === '') {
+        this.$message.error('请输入旧密码')
+        return false
+      }
+      if (this.form.new_password.trim() === '') {
+        this.$message.error('请输入新密码')
+        return false
+      }
+      if (this.form.new_password.trim().length < 6) {
+        this.$message.error('密码长度不能小于6位')
+        return false
+      }
+      if (this.form.re_password.trim() === '') {
+        this.$message.error('请再次输入新密码')
+        return false
+      }
+      if (this.form.new_password !== this.form.re_password) {
+        this.$message.error('两次输入的密码不一致')
+        return false
+      }
+      this.form.email  = this.user_info.email
+      _apiPost('/api/update-password', this.form).then(res => {
+        this.$message.success('密码修改成功,请重新登录')
+        this.dialogFormVisible = false
+        this.$ls.set('user_info', '')
+        this.$router.push({path: '/login'})
+      })
+    },
 
     command(e) {
       this.eventHandler[e]();
@@ -82,10 +147,11 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$ls.set('user_info','')
+        this.$ls.set('user_info', '')
         this.$router.push({path: '/login'})
       })
     },
+
 
     goHome() {
       // 本页跳转
@@ -194,6 +260,7 @@ export default {
 ::v-deep .el-avatar > img {
   width: 100%;
 }
+
 .nav-right {
   width: 40%;
   height: 100%;
@@ -211,7 +278,7 @@ export default {
     margin-top: 5px;
 
     &:first-child {
-      margin-right: 15px;
+      margin-right: 20px;
     }
   }
 

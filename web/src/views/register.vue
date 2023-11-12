@@ -17,7 +17,7 @@
                 </div>
                 <div class="input-group m-b-2">
                   <span class="input-group-addon"><i class="el-icon-lock"></i></span>
-                  <input type="password" class="form-control" placeholder="请输入密码" v-model="form.password">
+                  <input type="password"  class="form-control" placeholder="请输入密码" v-model="form.password">
                 </div>
                 <div class="input-group m-b-2">
                   <span class="input-group-addon"><i class="el-icon-lock"></i></span>
