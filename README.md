@@ -13,6 +13,8 @@ pip install -r requirements.txt
 - 初始化数据库
 `data/init.sql` 文件为数据库初始化文件,请自行导入数据库
 
+- 添加一个新账号作为后台管理账号. 先注册一个账号, 然后在数据库中修改该账号的`status`字段为1, 即可作为后台管理账号登录.
+
 ## 渠道类型说明
 - 1: 原生OpenAI
 - 2: OhMyGPT

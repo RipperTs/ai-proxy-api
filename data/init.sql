@@ -54,3 +54,17 @@ create table tokens
 )
     comment '令牌列表';
 
+create table users
+(
+    id           int auto_increment
+        primary key,
+    username     varchar(100) default '' null comment '用户名称',
+    email        varchar(100) default '' null comment '邮箱',
+    password     varchar(255)            null comment '密码',
+    status       tinyint(3)   default 1  null comment '状态',
+    created_time datetime                null,
+    constraint users_pk2
+        unique (email)
+)
+    comment '用户表';
+
