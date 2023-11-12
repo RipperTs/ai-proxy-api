@@ -11,6 +11,7 @@ from model.po.add_channel_po import AddChannelPo
 from model.po.add_token_po import AddTokenPo
 from model.po.login_user_po import LoginUserPo
 from model.po.register_user_po import RegisterUserPo
+from model.po.update_password_po import UpdatePasswordPo
 from service.channels_service import get_channel_list, get_channel_balance, do_add_channel, \
     do_del_channel, do_change_channel_status, get_channel_by_id, update_channel_response_time
 from service.logs_service import get_log_list
@@ -18,7 +19,7 @@ from service.token_service import get_token_list, do_add_token, do_del_token, \
     do_change_token_status
 import time
 
-from service.users_sercice import create_user, login_for_access_token
+from service.users_sercice import create_user, login_for_access_token, do_update_password
 
 app = FastAPI()
 register_all_handler(app)
@@ -153,6 +154,12 @@ def login_user(data: LoginUserPo):
             status_code=401,
             content={"code": 401, "data": None, "msg": str(e)},
         )
+
+
+@app.post('/ai-proxy/api/update-password')
+def update_password(data: UpdatePasswordPo):
+    result = do_update_password(data.email, data.old_password, data.new_password)
+    return resultSuccess(data=result)
 
 
 if __name__ == '__main__':

@@ -41,3 +41,13 @@ class UsersEntity(Model):
             return user
         finally:
             db.close()
+
+    @classmethod
+    def update_password(cls, email, password):
+        try:
+            user = cls.select().where(cls.email == email).get()
+            user.password = password
+            user.save()
+            return user
+        finally:
+            db.close()

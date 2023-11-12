@@ -74,3 +74,13 @@ def get_current_user(token: str = Depends(oauth2_scheme)):
     # todo: 验证用户是否存在或已被禁用
     user = {"username": username, "email": email}
     return user
+
+
+def do_update_password(email, old_password, new_password):
+    users = UsersEntity.get_by_email(email)
+    if users is None:
+        raise Exception("用户名或密码错误")
+    if not verify_password(old_password, users['password']):
+        raise Exception("用户名或密码错误")
+    hashed_password = get_password_hash(new_password)
+    return UsersEntity.update_password(email, hashed_password)
