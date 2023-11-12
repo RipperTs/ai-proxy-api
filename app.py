@@ -1,18 +1,21 @@
 import logging
 
 import requests
-from fastapi import FastAPI
+from fastapi import FastAPI, Form
 from common import config
 from common.vo import resultSuccess, resultError
 from handler.exception_handler import register_all_handler
 from model.po.add_channel_po import AddChannelPo
 from model.po.add_token_po import AddTokenPo
+from model.po.register_user_po import RegisterUserPo
 from service.channels_service import get_channel_list, get_channel_balance, do_add_channel, \
     do_del_channel, do_change_channel_status, get_channel_by_id, update_channel_response_time
 from service.logs_service import get_log_list
 from service.token_service import get_token_list, do_add_token, do_del_token, \
     do_change_token_status
 import time
+
+from service.users_sercice import create_user
 
 app = FastAPI()
 register_all_handler(app)
@@ -125,6 +128,15 @@ def check_channel(channel_id: int):
 
     except Exception as e:
         logging.error(f"检测渠道失败, {e}")
+        return resultError(msg=str(e))
+
+
+@app.post('/ai-proxy/api/register-user', )
+def register_user(data: RegisterUserPo):
+    try:
+        user = create_user(data.username, data.email, data.password)
+        return resultSuccess(data=user, msg="注册成功, 无法自动登录, 请联系管理员验证账号后登录")
+    except Exception as e:
         return resultError(msg=str(e))
 
 

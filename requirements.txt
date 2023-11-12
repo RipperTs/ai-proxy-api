@@ -9,3 +9,6 @@ python-dotenv
 python-multipart
 httpx
 tenacity
+fastapi-jwt
+passlib
+bcrypt
