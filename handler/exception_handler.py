@@ -53,7 +53,7 @@ def register_exception(app: FastAPI):
         logging.error(f"全局异常\nURL:{request.url}\nHeaders:{request.headers}\n{traceback.format_exc()}")
         return JSONResponse(
             status_code=status.HTTP_200_OK,
-            content={"code": 500, "data": {"tip": "系统繁忙,请稍后再试!", "exc": str(exc)}, "message": "fail"},
+            content={"code": 500, "data": None, "message": str(exc)},
         )
 
     # 捕获断言错误，用于返回错误状态
