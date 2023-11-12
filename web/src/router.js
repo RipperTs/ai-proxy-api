@@ -25,6 +25,11 @@ var routes = [
     meta: {title: '关于', show: true, activeMenuPath: '/about'},
   },
   {
+    path: '/login', component: () => import("@/views/login.vue"),
+    meta: {title: '用户登录', show: false, activeMenuPath: '/login'},
+    children: [],
+  },
+  {
     path: '/404',
     meta: {title: '404', show: false, activeMenuPath: '/404'},
     component: () => import('@/views/NotFound'),

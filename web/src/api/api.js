@@ -1,5 +1,8 @@
 import axios from 'axios'
 import {Message} from 'element-ui';
+import Vue from "vue";
+
+const vm = new Vue()
 
 /**
  * 封装get方法
@@ -12,10 +15,12 @@ export function _apiGet(url, params) {
   return new Promise((resolve, reject) => {
     url = '/web/ai-proxy' + url
     axios.get(url, {
-      params: params
+      params: params,
+      headers: {
+        'ai-proxy-token': vm.$ls.get('user_info')?.access_token || null
+      }
     }).then(res => {
       if (res.status !== 200) {
-        console.error('接口请求失败: ', res)
         Message.error(res.data.msg);
         return;
       }
@@ -26,8 +31,12 @@ export function _apiGet(url, params) {
       }
       resolve(res.data)
     }).catch(err => {
-      Message.error(err.data);
-      reject(err.data)
+      const response = err.response
+      Message.error(response.data.msg);
+      if (response.status === 401){
+        window.location.href  = '/login'
+      }
+      reject(response.data)
     })
   })
 }
@@ -42,7 +51,11 @@ export function _apiGet(url, params) {
 export function _apiPost(url, data) {
   return new Promise((resolve, reject) => {
     url = '/web/ai-proxy' + url
-    axios.post(url, data).then(res => {
+    axios.post(url, data,{
+      headers: {
+        'ai-proxy-token': vm.$ls.get('user_info')?.access_token || null
+      }
+    }).then(res => {
       if (res.status !== 200) {
         Message.error(res.data.msg);
         return;
@@ -54,8 +67,12 @@ export function _apiPost(url, data) {
       }
       resolve(res.data)
     }).catch(err => {
-      Message.error(err.data);
-      reject(err.data)
+      const response = err.response
+      Message.error(response.data.msg);
+      if (response.status === 401){
+        window.location.href  = '/login'
+      }
+      reject(response.data)
     })
   })
 }

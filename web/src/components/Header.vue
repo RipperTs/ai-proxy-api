@@ -22,6 +22,20 @@
           </el-menu>
         </div>
       </div>
+      <div class="nav-right">
+        <div class="about-box">{{ user_info?.username }}</div>
+        <div class="about-box">
+          <el-dropdown :hide-on-click="false" @command="command">
+            <el-avatar style="width: 30px;height: 30px" :src="'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'">
+              <template #default>user</template>
+            </el-avatar>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item icon="el-icon-switch-button" command="signOut">退出登录
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -36,12 +50,6 @@ export default {
     title: {
       type: String,
       default: "Proxy API"
-    },
-    user_info: {
-      type: Object,
-      default: () => {
-        return {}
-      }
     }
   },
   data() {
@@ -58,9 +66,26 @@ export default {
         },
       };
     },
+    user_info() {
+      return this.$ls.get('user_info')
+    },
   },
   methods: {
 
+    command(e) {
+      this.eventHandler[e]();
+    },
+
+    signOut(e) {
+      this.$confirm('确定退出登录吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$ls.set('user_info','')
+        this.$router.push({path: '/login'})
+      })
+    },
 
     goHome() {
       // 本页跳转
@@ -168,5 +193,30 @@ export default {
 
 ::v-deep .el-avatar > img {
   width: 100%;
+}
+.nav-right {
+  width: 40%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: right;
+
+  .about-box {
+    margin-right: 20px;
+    color: #555;
+    cursor: pointer;
+    border: 1px transparent;
+    border-radius: 4px;
+    font-size: 16px;
+    margin-top: 5px;
+
+    &:first-child {
+      margin-right: 15px;
+    }
+  }
+
+  .options {
+    margin-right: 20px;
+  }
 }
 </style>
