@@ -107,7 +107,7 @@ def register_middleware(app: FastAPI):
                 return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED,
                                     content={"code": 401, "data": None, "msg": "token不存在"})
             token = headers['ai-proxy-token']
-            user_info = get_current_user(token)
+            user_info = await get_current_user(token)
             # user_info传递给上下文中
             request.state.user_info = user_info
             return await call_next(request)

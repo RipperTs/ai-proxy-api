@@ -58,7 +58,7 @@ def login_for_access_token(email, password):
             "email": users['email']}
 
 
-def decode_token(token: str):
+async def decode_token(token: str):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         return payload
@@ -66,8 +66,8 @@ def decode_token(token: str):
         return None
 
 
-def get_current_user(token: str = Depends(oauth2_scheme)):
-    payload = decode_token(token)
+async def get_current_user(token: str = Depends(oauth2_scheme)):
+    payload = await decode_token(token)
     if payload is None:
         raise HTTPException(status_code=401, detail="Invalid token")
     username = payload.get("username")
