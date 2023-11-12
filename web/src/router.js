@@ -7,7 +7,7 @@ Vue.use(VueRouter)
 var routes = [
   {
     path: '/',
-    meta: {title: '渠道', show: true, activeMenuPath: '/channels'},
+    meta: {title: '渠道', show: true, activeMenuPath: '/'},
     component: () => import("@/views/channels.vue"),
   },
   {
@@ -27,6 +27,11 @@ var routes = [
   {
     path: '/login', component: () => import("@/views/login.vue"),
     meta: {title: '用户登录', show: false, activeMenuPath: '/login'},
+    children: [],
+  },
+  {
+    path: '/register', component: () => import("@/views/register.vue"),
+    meta: {title: '用户注册', show: false, activeMenuPath: '/register'},
     children: [],
   },
   {

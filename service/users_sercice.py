@@ -54,7 +54,8 @@ def login_for_access_token(email, password):
     access_token = create_access_token(
         data={"username": users['username'], "email": users['email']}, expires_delta=access_token_expires
     )
-    return {"access_token": access_token, "token_type": "bearer"}
+    return {"access_token": access_token, "token_type": "bearer", "username": users['username'],
+            "email": users['email']}
 
 
 def decode_token(token: str):

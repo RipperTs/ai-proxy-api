@@ -22,7 +22,7 @@ export default {
   },
   computed: {
     isShowGlobalModule() {
-      return this.$route.meta.title !== '404' && this.$route.meta.title !== '用户登录'
+      return this.$route.meta.title !== '404' && this.$route.meta.title !== '用户登录' && this.$route.meta.title !== '用户注册'
     }
   },
 }

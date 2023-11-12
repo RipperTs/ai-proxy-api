@@ -6,25 +6,27 @@
           <el-col :span="24" :xs="24" :sm="16" :md="16" :lg="16">
             <div class="login-form">
               <div class="card-block">
-                <h1>用户登录</h1>
-                <p class="text-muted">请使用邮箱/密码登录平台</p>
+                <h1>用户注册</h1>
+                <div class="input-group m-b-1">
+                  <span class="input-group-addon"><i class="el-icon-user"></i></span>
+                  <input type="text" class="form-control" placeholder="请输入用户名" v-model="form.username">
+                </div>
                 <div class="input-group m-b-1">
                   <span class="input-group-addon"><i class="el-icon-message"></i></span>
                   <input type="text" class="form-control" placeholder="请输入邮箱" v-model="form.email">
                 </div>
                 <div class="input-group m-b-2">
                   <span class="input-group-addon"><i class="el-icon-lock"></i></span>
-                  <input type="password" class="form-control" placeholder="请输入密码" v-model="form.password"
-                         @keyup.enter="login">
+                  <input type="password" class="form-control" placeholder="请输入密码" v-model="form.password">
+                </div>
+                <div class="input-group m-b-2">
+                  <span class="input-group-addon"><i class="el-icon-lock"></i></span>
+                  <input type="password" class="form-control" placeholder="请再次输入密码" v-model="form.re_password">
                 </div>
                 <div class="row">
                   <el-row>
                     <el-col :span="12">
-                      <el-button type="primary" class="btn btn-primary p-x-2" @click="login">登 录</el-button>
-                    </el-col>
-                    <el-col :span="12">
-                      <el-button type="text" disabled class="btn btn-link forgot" style="float:right;">忘记密码?
-                      </el-button>
+                      <el-button type="primary" class="btn btn-primary p-x-2" @click="login">注 册</el-button>
                     </el-col>
                   </el-row>
                 </div>
@@ -34,9 +36,9 @@
           <el-col :span="24" :xs="24" :sm="8" :md="8" :lg="8">
             <div class="login-register">
               <div class="card-block">
-                <h2>注册</h2>
-                <p>平台注册后无法自动登录,需联系管理员进行验证后才可正常使用.</p>
-                <el-button type="danger" class="btn btn-primary active m-t-1" @click="toLogin()"> 马上注册</el-button>
+                <h2>登录</h2>
+                <p>如果您已经拥有此平台账号,且账号已经通过验证,可以直接登录!</p>
+                <el-button type="danger" class="btn btn-primary active m-t-1" @click="toLogin"> 立即登录</el-button>
               </div>
             </div>
           </el-col>
@@ -62,14 +64,40 @@ export default {
   },
   methods: {
     login() {
-      _apiPost('/api/login-user', this.form).then(res => {
-        this.$ls.set('user_info', res.data)
-        this.$router.push({path: '/'})
+      if (!this.form.email) {
+        this.$message.error('请输入邮箱')
+        return false
+      }
+      if (!this.form.password) {
+        this.$message.error('请输入密码')
+        return false
+      }
+      if (this.form.password.length < 6) {
+        this.$message.error('密码长度不能小于6位')
+        return false
+      }
+      if (!this.form.re_password) {
+        this.$message.error('请再次输入密码')
+        return false
+      }
+      if (this.form.password !== this.form.re_password) {
+        this.$message.error('两次输入的密码不一致')
+        return false
+      }
+      // 检查邮箱格式是否正确
+      const reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/
+      if (!reg.test(this.form.email)) {
+        this.$message.error('邮箱格式不正确')
+        return false
+      }
+      _apiPost('/api/register-user', this.form).then(res => {
+        this.$message.success('注册成功,请联系管理员进行验证后才可正常使用.')
+        this.$router.push({path: '/login'})
       })
     },
 
     toLogin(){
-      this.$router.push({path: '/register'})
+      this.$router.push({path: '/login'})
     },
 
   }
