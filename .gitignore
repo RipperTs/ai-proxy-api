@@ -1,5 +1,4 @@
 */target
-*/log
 */tomcat
 *.iml
 .idea/
@@ -9,10 +8,9 @@ tomcat/
 .project
 .settings/
 .classpath
-/log/
 src/main/resources/META-INF
 .DS_Store
-log/*
+logs/*
 .idea/*
 application-local.properties
 rebel.xml

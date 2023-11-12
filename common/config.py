@@ -4,14 +4,15 @@
 
 from dotenv import load_dotenv
 import os
-import logging
+
+from handler.log_handler import register_log_handler
 
 load_dotenv()
+register_log_handler()
 
 __all__ = [
     'server_name',
     'server_port',
-    'log_level',
     'db_host',
     'db_port',
     'db_user',
@@ -30,13 +31,6 @@ os.environ['TOKENIZERS_PARALLELISM'] = "false"
 # 系统服务及端口配置
 server_name = os.environ.get("SERVER_NAME", '0.0.0.0')
 server_port = int(os.environ.get("SERVER_PORT", 3000))
-
-log_level = os.environ.get("LOG_LEVEL", "WARNING")
-
-logging.basicConfig(
-    level=log_level,
-    format="%(asctime)s [%(levelname)s] [%(filename)s:%(lineno)d] %(message)s",
-)
 
 # 数据库配置
 db_host = os.environ.get('DB_HOST', 'localhost')

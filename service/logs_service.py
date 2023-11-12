@@ -31,7 +31,7 @@ async def insert_log(messages: list, model_name: str, channel, token_info):
         LogsEntity.insert_log(remark, token_info['name'], model_name, channel['id'], channel['name'],
                               request_tokens=token_num)
     except Exception as e:
-        logging.error(f"记录日志失败: {e},  {model_name}, {channel}, {token_info}")
+        logging.error(f"新增请求日志失败: {e},  {model_name}, {channel}, {token_info}")
         return None
 
 
