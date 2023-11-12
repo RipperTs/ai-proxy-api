@@ -1,5 +1,17 @@
 # AI接口转发前端项目
 
+## 启动项目
+```bash
+# 安装依赖
+npm install
+
+# 运行服务
+npm run serve
+
+# 打包上传
+npm run build
+```
+
 ## Nginx伪静态示例
 ```
 location /web/ {    
