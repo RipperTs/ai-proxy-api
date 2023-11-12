@@ -7,7 +7,7 @@
     "build": "vue-cli-service build",
     "genmenu": "node gen-router.js",
     "svgo": "svgo -f src/assets/icons/svg --config=src/assets/icons/svgo.config.js",
-    "push": "npm run build && scp -r dist/* root@23.224.125.68:/www/wwwroot/proxy.ai.noteo.cn"
+    "push": "npm run build && scp -r dist/* root@23.224.125.68:/www/wwwroot/aikey.wslmf.com"
   },
   "dependencies": {
     "animejs": "^3.2.1",
