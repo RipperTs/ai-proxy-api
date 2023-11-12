@@ -40,5 +40,10 @@ pip install -r requirements.txt
 - [ ] `ZhiPu.AI`Chat接口
 - [ ] `ZhiPu.AI`Embedding接口
 
+## 项目截图
+![Xnip2023-11-12_14-31-44.png](docs%2FXnip2023-11-12_14-31-44.png)  
+![Xnip2023-11-12_14-30-03.png](docs%2FXnip2023-11-12_14-30-03.png)   
+![Xnip2023-11-12_14-30-15.png](docs%2FXnip2023-11-12_14-30-15.png)  
+
 ## 接口文档
 - [查看接口文档](https://apifox.com/apidoc/shared-2c467c83-554d-4a60-b640-edbcc877f383)
