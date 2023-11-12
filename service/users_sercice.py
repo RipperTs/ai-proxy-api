@@ -66,8 +66,6 @@ def decode_token(token: str):
         return payload
     except JWTError:
         raise HTTPException(status_code=401, detail="Invalid token")
-    except Exception as e:
-        raise Exception(str(e))
 
 
 def get_current_user(token: str = Depends(oauth2_scheme)):
