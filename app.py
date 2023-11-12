@@ -1,12 +1,13 @@
 import logging
 
 import requests
-from fastapi import FastAPI, Form
+from fastapi import FastAPI, Form, HTTPException
 from common import config
 from common.vo import resultSuccess, resultError
 from handler.exception_handler import register_all_handler
 from model.po.add_channel_po import AddChannelPo
 from model.po.add_token_po import AddTokenPo
+from model.po.login_user_po import LoginUserPo
 from model.po.register_user_po import RegisterUserPo
 from service.channels_service import get_channel_list, get_channel_balance, do_add_channel, \
     do_del_channel, do_change_channel_status, get_channel_by_id, update_channel_response_time
@@ -15,7 +16,7 @@ from service.token_service import get_token_list, do_add_token, do_del_token, \
     do_change_token_status
 import time
 
-from service.users_sercice import create_user
+from service.users_sercice import create_user, login_for_access_token
 
 app = FastAPI()
 register_all_handler(app)
@@ -138,6 +139,12 @@ def register_user(data: RegisterUserPo):
         return resultSuccess(data=user, msg="注册成功, 无法自动登录, 请联系管理员验证账号后登录")
     except Exception as e:
         return resultError(msg=str(e))
+
+
+@app.post('/ai-proxy/api/login-user')
+def login_user(data: LoginUserPo):
+    result = login_for_access_token(data.email, data.password)
+    return resultSuccess(data=result)
 
 
 if __name__ == '__main__':
