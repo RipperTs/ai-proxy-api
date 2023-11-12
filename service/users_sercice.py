@@ -60,10 +60,14 @@ def login_for_access_token(email, password):
 
 def decode_token(token: str):
     try:
+        if token == '' or len(token) < 10:
+            raise HTTPException(status_code=401, detail="Invalid token")
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         return payload
-    except JWTError as e:
+    except JWTError:
         raise HTTPException(status_code=401, detail="Invalid token")
+    except Exception as e:
+        raise Exception(str(e))
 
 
 def get_current_user(token: str = Depends(oauth2_scheme)):
