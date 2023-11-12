@@ -20,6 +20,11 @@ logger = logging.getLogger(__name__)
                 retry=tenacity.retry_if_exception_type(Exception),
                 before_sleep=tenacity.before_sleep_log(logger, logging.DEBUG))
 async def do_proxy(request: Request):
+    """
+    转发代理请求操作
+    :param request: 请求对象
+    :return: StreamingResponse
+    """
     url_path = request.url.path
     headers = dict(request.headers)
     token_info = await get_token_info(headers['authorization'])
