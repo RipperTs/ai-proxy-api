@@ -60,16 +60,16 @@ def login_for_access_token(email, password):
 
 def decode_token(token: str):
     try:
-        if token == '' or len(token) < 10:
-            raise HTTPException(status_code=401, detail="Invalid token")
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         return payload
-    except JWTError:
-        raise HTTPException(status_code=401, detail="Invalid token")
+    except Exception:
+        return None
 
 
 def get_current_user(token: str = Depends(oauth2_scheme)):
     payload = decode_token(token)
+    if payload is None:
+        raise HTTPException(status_code=401, detail="Invalid token")
     username = payload.get("username")
     email = payload.get("email")
     if not username or not email:
