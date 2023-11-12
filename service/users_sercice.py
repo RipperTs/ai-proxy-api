@@ -45,9 +45,11 @@ def create_access_token(data: dict, expires_delta: timedelta):
 def login_for_access_token(email, password):
     users = UsersEntity.get_by_email(email)
     if users is None:
-        raise HTTPException(status_code=401, detail="用户名或密码错误")
+        raise Exception("用户名或密码错误")
     if not verify_password(password, users['password']):
-        raise HTTPException(status_code=401, detail="用户名或密码错误")
+        raise Exception("用户名或密码错误")
+    if users['status'] != 1:
+        raise Exception("用户已被禁用")
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
         data={"username": users['username'], "email": users['email']}, expires_delta=access_token_expires
@@ -72,7 +74,3 @@ def get_current_user(token: str = Depends(oauth2_scheme)):
     # todo: 验证用户是否存在或已被禁用
     user = {"username": username, "email": email}
     return user
-
-
-if __name__ == '__main__':
-    print(get_current_user("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiZW1haWwiOiJ3YW5neWlmYW5pQGZveG1haWwuY29tIiwiZXhwIjoxNjk5NzYzNTM4fQ.wAIVtC7AHqRYlOuCtLCfnR45ITYv9wjib8-G-s5-GUM"))

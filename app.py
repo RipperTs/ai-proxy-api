@@ -1,7 +1,9 @@
 import logging
 
 import requests
-from fastapi import FastAPI, Form, HTTPException
+from fastapi import FastAPI, Form
+from starlette.responses import JSONResponse
+
 from common import config
 from common.vo import resultSuccess, resultError
 from handler.exception_handler import register_all_handler
@@ -143,8 +145,14 @@ def register_user(data: RegisterUserPo):
 
 @app.post('/ai-proxy/api/login-user')
 def login_user(data: LoginUserPo):
-    result = login_for_access_token(data.email, data.password)
-    return resultSuccess(data=result)
+    try:
+        result = login_for_access_token(data.email, data.password)
+        return resultSuccess(data=result)
+    except Exception as e:
+        return JSONResponse(
+            status_code=401,
+            content={"code": 401, "data": None, "msg": str(e)},
+        )
 
 
 if __name__ == '__main__':
