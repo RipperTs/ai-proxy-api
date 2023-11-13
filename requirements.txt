@@ -12,3 +12,6 @@ tenacity
 fastapi-jwt
 passlib
 bcrypt
+dashscope
+sse_starlette
+pydantic==2.2.1

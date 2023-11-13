@@ -9,6 +9,7 @@ import logging
 from starlette import status
 from starlette.responses import JSONResponse
 
+from service.lingshi_qwen_service import do_lingshi_qwen_proxy
 from service.proxy_service import do_openai_proxy
 from service.users_sercice import get_current_user
 
@@ -116,5 +117,10 @@ def register_middleware(app: FastAPI):
         else:
             request_data = await request.form()
             request_data = dict(request_data)
+
         request.state.request_data = request_data
+        model_name = request_data.get('model', '')
+        if model_name == "qwen-14b-chat" or model_name == "qwen-plus" or model_name == "qwen-7b-chat" or model_name == "qwen-turbo":
+            return await do_lingshi_qwen_proxy(request)
+
         return await do_openai_proxy(request)

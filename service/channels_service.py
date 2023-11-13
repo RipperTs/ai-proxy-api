@@ -1,3 +1,5 @@
+import logging
+
 from peewee import DoesNotExist
 
 from common import config
@@ -16,8 +18,8 @@ def get_base_url(channel):
         if channel['type'] == 4:
             return "https://api.openai-sb.com"
         else:
-            raise Exception("渠道地址不存在")
-    return channel['base_url']
+            logging.warning("渠道base_url为空")
+    return channel.get('base_url','')
 
 
 async def get_channel_info(model_name: str):

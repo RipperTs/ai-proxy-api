@@ -27,6 +27,7 @@
             <el-tag effect="plain" type="warning" v-if="scope.row.type === 2">OhMyGPT</el-tag>
             <el-tag effect="plain" type="danger" v-if="scope.row.type === 3">OneAPI</el-tag>
             <el-tag effect="plain" type="primary" v-if="scope.row.type === 4">OpenSB</el-tag>
+            <el-tag effect="plain" type="success" v-if="scope.row.type === 5">灵石Qwen</el-tag>
           </template>
         </el-table-column>
         <el-table-column
@@ -67,8 +68,8 @@
         <el-table-column
           label="操作">
           <template slot-scope="scope">
-            <el-button type="success" @click="testChannel(scope.row)" size="mini">测试</el-button>
-            <el-button type="warning" @click="updateBalance(scope.row)" size="mini">更新余额
+            <el-button type="success" @click="testChannel(scope.row)" :disabled="scope.row.type === 5" size="mini">测试</el-button>
+            <el-button type="warning" @click="updateBalance(scope.row)" :disabled="scope.row.type === 5" size="mini">更新余额
             </el-button>
             <el-button type="primary" size="mini" disabled>编辑</el-button>
             <el-button type="danger" @click="delChannel(scope.row)" size="mini">删除</el-button>
@@ -98,6 +99,7 @@
             <el-option :value="2" label="OhMyGPT"></el-option>
             <el-option :value="3" label="OneAPI"></el-option>
             <el-option :value="4" label="OpenSB"></el-option>
+            <el-option :value="5" label="灵石Qwen"></el-option>
           </el-select>
         </el-form-item>
 
@@ -109,7 +111,7 @@
           <el-input v-model="form.key" class="input-width"></el-input>
         </el-form-item>
         <el-form-item label="请求地址" :label-width="formLabelWidth">
-          <el-input v-model="form.base_url" class="input-width"></el-input>
+          <el-input v-model="form.base_url" :disabled="form.type === 5" class="input-width"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -136,7 +138,7 @@ export default {
       form: {
         name: '',
         type: 1,
-        models: 'gpt-3.5-turbo,gpt-3.5-turbo-0301,gpt-3.5-turbo-0613,gpt-3.5-turbo-16k,gpt-3.5-turbo-16k-0613,gpt-3.5-turbo-instruct,text-embedding-ada-002,text-davinci-003,text-davinci-002,text-curie-001,text-babbage-001,text-ada-001,text-moderation-latest,text-moderation-stable,text-davinci-edit-001,text-embedding-v1',
+        models: 'gpt-3.5-turbo,gpt-3.5-turbo-0301,gpt-3.5-turbo-0613,gpt-3.5-turbo-16k,gpt-3.5-turbo-16k-0613,gpt-3.5-turbo-instruct,text-embedding-ada-002,text-davinci-003,text-davinci-002,gpt-3.5-turbo-1106',
       },
       formLabelWidth: '100px',
     }
