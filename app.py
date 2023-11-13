@@ -17,7 +17,7 @@ from service.channels_service import get_channel_list, get_channel_balance, do_a
     do_update_channel, get_channel_info_by_id
 from service.logs_service import get_log_list
 from service.token_service import get_token_list, do_add_token, do_del_token, \
-    do_change_token_status, do_update_token
+    do_change_token_status, do_update_token, get_token_info_by_id
 import time
 
 from service.users_sercice import create_user, login_for_access_token, do_update_password
@@ -93,6 +93,12 @@ def change_channel_status(channel_id: int, status: int):
         return resultSuccess(data={})
     except Exception as e:
         return resultError(msg=str(e))
+
+
+@app.get('/ai-proxy/api/token-info')
+def token_info(token_id: int):
+    token = get_token_info_by_id(token_id)
+    return resultSuccess(data=token)
 
 
 @app.post('/ai-proxy/api/add-token')

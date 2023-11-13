@@ -61,3 +61,11 @@ def do_update_token(token_id, data: AddTokenPo):
         return token
     except DoesNotExist:
         raise Exception("渠道不存在")
+
+
+def get_token_info_by_id(token_id):
+    try:
+        token = TokensEntity.get_by_id(token_id)
+        return token.__dict__.get('__data__')
+    except DoesNotExist:
+        return None
