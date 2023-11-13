@@ -13,8 +13,11 @@ import logging
 from starlette.responses import Response
 
 from service.channels_service import get_channel_info
+from service.logs_service import insert_log
 from service.token_service import get_token_info
+import tenacity
 
+logger = logging.getLogger(__name__)
 
 class ChatMessage(BaseModel):
     role: Literal["user", "assistant", "system"]
@@ -45,6 +48,9 @@ class ChatCompletionResponse(BaseModel):
     created: Optional[int] = Field(default_factory=lambda: int(time.time()))
 
 
+@tenacity.retry(wait=tenacity.wait_fixed(1), stop=tenacity.stop_after_attempt(3), reraise=True,
+                retry=tenacity.retry_if_exception_type(Exception),
+                before_sleep=tenacity.before_sleep_log(logger, logging.DEBUG))
 async def do_lingshi_qwen_proxy(request: Request):
     global model, tokenizer
 
@@ -75,6 +81,8 @@ async def do_lingshi_qwen_proxy(request: Request):
     if stream:
         generate = predict(query,prev_messages, model_name, channel['key'], data.get('temperature', 0.5),
                            data.get('top_p', 0.9))
+        # 记录请求日志
+        await insert_log(data.get('messages', []), model_name, channel, token_info)
         return EventSourceResponse(generate, media_type="text/event-stream")
 
     responses = Generation.call(
@@ -93,6 +101,8 @@ async def do_lingshi_qwen_proxy(request: Request):
         finish_reason="stop"
     )
 
+    # 记录请求日志
+    await insert_log(data.get('messages', []), model_name, channel, token_info)
     model_result = ChatCompletionResponse(model=model_name, choices=[choice_data], object="chat.completion")
     return Response(model_result.model_dump_json(exclude_unset=True), media_type="application/json")
 
