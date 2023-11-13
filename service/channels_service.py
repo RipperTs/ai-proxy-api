@@ -107,3 +107,11 @@ def do_update_channel(channel_id, data: AddChannelPo):
         return channel
     except DoesNotExist:
         raise Exception("渠道不存在")
+
+
+def get_channel_info_by_id(channel_id: int):
+    try:
+        channel = ChannelsEntity.get_by_id(channel_id)
+        return channel.__dict__.get('__data__')
+    except DoesNotExist:
+        return None

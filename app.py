@@ -14,7 +14,7 @@ from model.po.register_user_po import RegisterUserPo
 from model.po.update_password_po import UpdatePasswordPo
 from service.channels_service import get_channel_list, get_channel_balance, do_add_channel, \
     do_del_channel, do_change_channel_status, get_channel_by_id, update_channel_response_time, \
-    do_update_channel
+    do_update_channel, get_channel_info_by_id
 from service.logs_service import get_log_list
 from service.token_service import get_token_list, do_add_token, do_del_token, \
     do_change_token_status, do_update_token
@@ -51,6 +51,12 @@ def balance(channel_id):
         return resultSuccess(data={"balance": result / 100})
     except Exception as e:
         return resultError(msg=str(e))
+
+
+@app.get('/ai-proxy/api/channel-info')
+def channel_info(channel_id: int):
+    channel = get_channel_info_by_id(channel_id)
+    return resultSuccess(data=channel)
 
 
 @app.post('/ai-proxy/api/add-channel')
