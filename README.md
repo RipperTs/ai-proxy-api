@@ -21,6 +21,7 @@ pip install -r requirements.txt
 - 2: OhMyGPT
 - 3: 所有One-API程序转发的接口
 - 4: OpenSB
+- 5: 阿里灵石Qwen系列 (模型名称传: `qwen-7b-chat`,`qwen-14b-chat`,`qwen-plus`,`qwen-turbo`)
 
 ## 项目架构
  ![image](./docs/img.png)
