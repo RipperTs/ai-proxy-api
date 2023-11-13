@@ -35,7 +35,7 @@ pip install -r requirements.txt
 - [x] `OpenAI`Assistants接口(待测试)
 - [ ] `Discord`MidJourney绘图接口
 - [ ] `Anthropic`Claude2接口
-- [x] `阿里灵石`Qwen系列接口(qwen-7b/14b/plus)
+- [x] `阿里灵石`Qwen系列接口(qwen-7b/14b/plus/turbo)
 - [x] `本地模型`ChatGLM3接口(待开放外网访问权限)
 - [ ] `ZhiPu.AI`Chat接口
 - [ ] `ZhiPu.AI`Embedding接口
