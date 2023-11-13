@@ -19,9 +19,9 @@ logger = logging.getLogger(__name__)
 @tenacity.retry(wait=tenacity.wait_fixed(1), stop=tenacity.stop_after_attempt(3), reraise=True,
                 retry=tenacity.retry_if_exception_type(Exception),
                 before_sleep=tenacity.before_sleep_log(logger, logging.DEBUG))
-async def do_proxy(request: Request):
+async def do_openai_proxy(request: Request):
     """
-    转发代理请求操作
+    OpenAI转发代理请求操作
     :param request: 请求对象
     :return: StreamingResponse
     """
@@ -29,12 +29,7 @@ async def do_proxy(request: Request):
     headers = dict(request.headers)
     token_info = await get_token_info(headers['authorization'])
     # 获取请求的参数
-    if "application/json" in headers['content-type']:
-        data = await request.json()
-    else:
-        data = await request.form()
-        data = dict(data)
-
+    data = request.state.request_data
     stream = data.get('stream', False)
     model_name = data.get('model', '')
 

@@ -9,7 +9,7 @@ import logging
 from starlette import status
 from starlette.responses import JSONResponse
 
-from service.proxy_service import do_proxy
+from service.proxy_service import do_openai_proxy
 from service.users_sercice import get_current_user
 
 
@@ -97,18 +97,24 @@ def register_middleware(app: FastAPI):
 
     @app.middleware("http")
     async def proxy(request: Request, call_next):
+        headers = dict(request.headers)
         if request.url.path.startswith("/ai-proxy"):
             if request.url.path.startswith("/ai-proxy/api/login-user") or request.url.path.startswith(
                     "/ai-proxy/api/register-user"):
                 return await call_next(request)
-            # 检查token
-            headers = dict(request.headers)
             if 'ai-proxy-token' not in headers:
                 return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED,
                                     content={"code": 401, "data": None, "msg": "token不存在"})
             token = headers['ai-proxy-token']
             user_info = await get_current_user(token)
-            # user_info传递给上下文中
             request.state.user_info = user_info
             return await call_next(request)
-        return await do_proxy(request)
+
+        # 处理请求参数
+        if "application/json" in headers['content-type']:
+            request_data = await request.json()
+        else:
+            request_data = await request.form()
+            request_data = dict(request_data)
+        request.state.request_data = request_data
+        return await do_openai_proxy(request)
