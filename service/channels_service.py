@@ -1,3 +1,5 @@
+from peewee import DoesNotExist
+
 from common import config
 from model.entity.channels_entity import ChannelsEntity
 import requests
@@ -94,13 +96,14 @@ def update_channel_response_time(channel_id, response_time):
 
 
 def do_update_channel(channel_id, data: AddChannelPo):
-    channel = ChannelsEntity.get_by_id(channel_id)
-    if channel is None:
+    try:
+        channel = ChannelsEntity.get_by_id(channel_id)
+        channel.key = data.key
+        channel.type = data.type
+        channel.name = data.name
+        channel.base_url = data.base_url
+        channel.models = data.models
+        channel.save()
+        return channel
+    except DoesNotExist:
         raise Exception("渠道不存在")
-    channel.key = data.key
-    channel.type = data.type
-    channel.name = data.name
-    channel.base_url = data.base_url
-    channel.models = data.models
-    channel.save()
-    return channel

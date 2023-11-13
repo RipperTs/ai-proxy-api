@@ -1,6 +1,8 @@
 import datetime
 import re
 
+from peewee import DoesNotExist
+
 from model.entity.tokens_entity import TokensEntity
 from model.po.add_token_po import AddTokenPo
 from utils.tiktokens import generate_random_string
@@ -48,3 +50,14 @@ def do_del_token(token_id):
 
 def do_change_token_status(token_id, status):
     return TokensEntity.update(status=status).where(TokensEntity.id == token_id).execute()
+
+
+def do_update_token(token_id, data: AddTokenPo):
+    try:
+        token = TokensEntity.get_by_id(token_id)
+        token.name = data.name
+        token.expired_time = data.expired_time
+        token.save()
+        return token
+    except DoesNotExist:
+        raise Exception("渠道不存在")

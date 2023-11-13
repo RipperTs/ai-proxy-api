@@ -17,7 +17,7 @@ from service.channels_service import get_channel_list, get_channel_balance, do_a
     do_update_channel
 from service.logs_service import get_log_list
 from service.token_service import get_token_list, do_add_token, do_del_token, \
-    do_change_token_status
+    do_change_token_status, do_update_token
 import time
 
 from service.users_sercice import create_user, login_for_access_token, do_update_password
@@ -103,6 +103,15 @@ def del_token(token_id: int):
     try:
         do_del_token(token_id)
         return resultSuccess(data={})
+    except Exception as e:
+        return resultError(msg=str(e))
+
+
+@app.post('/ai-proxy/api/{token_id}/update-token')
+def update_token(token_id: int, data: AddTokenPo):
+    try:
+        result = do_update_token(token_id, data)
+        return resultSuccess(data=result)
     except Exception as e:
         return resultError(msg=str(e))
 
