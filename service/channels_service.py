@@ -91,3 +91,16 @@ def get_channel_by_id(channel_id):
 def update_channel_response_time(channel_id, response_time):
     ChannelsEntity.update(response_time=response_time).where(ChannelsEntity.id == channel_id).execute()
     return True
+
+
+def do_update_channel(channel_id, data: AddChannelPo):
+    channel = ChannelsEntity.get_by_id(channel_id)
+    if channel is None:
+        raise Exception("渠道不存在")
+    channel.key = data.key
+    channel.type = data.type
+    channel.name = data.name
+    channel.base_url = data.base_url
+    channel.models = data.models
+    channel.save()
+    return channel

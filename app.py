@@ -1,7 +1,7 @@
 import logging
 
 import requests
-from fastapi import FastAPI, Form
+from fastapi import FastAPI
 from starlette.responses import JSONResponse
 
 from common import config
@@ -13,7 +13,8 @@ from model.po.login_user_po import LoginUserPo
 from model.po.register_user_po import RegisterUserPo
 from model.po.update_password_po import UpdatePasswordPo
 from service.channels_service import get_channel_list, get_channel_balance, do_add_channel, \
-    do_del_channel, do_change_channel_status, get_channel_by_id, update_channel_response_time
+    do_del_channel, do_change_channel_status, get_channel_by_id, update_channel_response_time, \
+    do_update_channel
 from service.logs_service import get_log_list
 from service.token_service import get_token_list, do_add_token, do_del_token, \
     do_change_token_status
@@ -66,6 +67,15 @@ def del_channel(channel_id: int):
     try:
         do_del_channel(channel_id)
         return resultSuccess(data={})
+    except Exception as e:
+        return resultError(msg=str(e))
+
+
+@app.post('/ai-proxy/api/{channel_id}/update-channel')
+def update_channel(channel_id: int, data: AddChannelPo):
+    try:
+        result = do_update_channel(channel_id, data)
+        return resultSuccess(data=result)
     except Exception as e:
         return resultError(msg=str(e))
 
