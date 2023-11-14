@@ -61,7 +61,7 @@ async def do_openai_proxy(request: Request):
         content=json.dumps(data).encode('utf-8') if "application/json" in headers.get('content-type',
                                                                                       '') else data,
         cookies=request.cookies,
-        timeout=20.0 if stream else 300.0
+        timeout=120.0 if stream else 600.0
     )
     r = await client.send(req, stream=True)
     if r.status_code != 200:
