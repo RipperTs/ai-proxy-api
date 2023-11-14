@@ -21,7 +21,8 @@ __all__ = [
     "use_azure_model",
     "azure_chat_model",
     "secret_key",
-    "access_token_expire_minutes"
+    "access_token_expire_minutes",
+    "server_workers",
 ]
 
 # 重置系统变量，在不需要设置的时候不设置环境变量，以免引起全局代理报错
@@ -33,6 +34,7 @@ os.environ['TOKENIZERS_PARALLELISM'] = "false"
 # 系统服务及端口配置
 server_name = os.environ.get("SERVER_NAME", '0.0.0.0')
 server_port = int(os.environ.get("SERVER_PORT", 3000))
+server_workers = int(os.environ.get("SERVER_WORKERS", 4))
 
 # 数据库配置
 db_host = os.environ.get('DB_HOST', 'localhost')

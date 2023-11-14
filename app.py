@@ -196,4 +196,5 @@ def update_password(data: UpdatePasswordPo):
 if __name__ == '__main__':
     import uvicorn
 
-    uvicorn.run(app='app:app', host=config.server_name, port=config.server_port, workers=2, reload=False)
+    uvicorn.run(app='app:app', host=config.server_name, port=config.server_port, workers=config.server_workers,
+                reload=False)
