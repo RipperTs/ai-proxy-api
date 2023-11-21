@@ -3,10 +3,8 @@ import logging
 from common import config
 from model.entity.logs_entity import LogsEntity
 from utils.tiktokens import num_tokens_from_string
-import threading
 
-
-def insert_log_thread(messages, model_name, channel, token_info):
+async def insert_log(messages: list, model_name: str, channel, token_info):
     try:
         content = ''
         for message in messages:
@@ -26,11 +24,6 @@ def insert_log_thread(messages, model_name, channel, token_info):
     except Exception as e:
         logging.error(f"新增请求日志失败: {e},  {model_name}, {channel}, {token_info}")
         return None
-
-
-async def insert_log(messages: list, model_name: str, channel, token_info):
-    thread = threading.Thread(target=insert_log_thread, args=(messages, model_name, channel, token_info))
-    thread.start()
 
 
 def get_log_list(page=1, limit=30):
