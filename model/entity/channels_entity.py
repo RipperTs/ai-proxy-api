@@ -31,7 +31,7 @@ class ChannelsEntity(Model):
         table_name = 'channels'
 
     @classmethod
-    def get_by_model(self, model):
+    async def get_by_model(self, model):
         """
         根据model随机获取渠道信息
         :param model:
@@ -74,5 +74,15 @@ class ChannelsEntity(Model):
             return result
         except DoesNotExist:
             return None
+        finally:
+            db.close()
+
+    @classmethod
+    def get_channel_by_id_entity(self, channel_id):
+        try:
+            result = self.get_by_id(channel_id)
+            return result
+        except DoesNotExist:
+            raise None
         finally:
             db.close()

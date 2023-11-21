@@ -21,7 +21,17 @@ class TokensEntity(Model):
         table_name = 'tokens'
 
     @classmethod
-    def get_by_key(self, key):
+    def get_token_by_id(self, token_id):
+        try:
+            result = self.get_by_id(token_id)
+            return result
+        except DoesNotExist:
+            return None
+        finally:
+            db.close()
+
+    @classmethod
+    async def get_by_key(self, key):
         """
         根据key获取token信息
         :param key:
@@ -45,6 +55,33 @@ class TokensEntity(Model):
         finally:
             db.close()
 
+    @classmethod
+    def change_status(cls, token_id, status):
+        try:
+            result = cls.update(status=status).where(cls.id == token_id).execute()
+            return result
+        except DoesNotExist:
+            return None
+        finally:
+            db.close()
 
-if __name__ == '__main__':
-    print(TokensEntity.get_by_key('kHEron0dXzG8Nkye8aBfA6C85f214477B83b5e352a84C7B4'))
+    @classmethod
+    def delete_token(self, token_id):
+        try:
+            return self.delete_by_id(token_id)
+        finally:
+            db.close()
+
+    @classmethod
+    def create_token(cls, key, name, status, user_id, expired_time):
+        try:
+            token = cls()
+            token.key = key
+            token.name = name
+            token.status = status
+            token.user_id = user_id
+            token.expired_time = expired_time
+            token.save(force_insert=True)
+            return token
+        finally:
+            db.close()

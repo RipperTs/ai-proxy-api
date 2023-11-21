@@ -2,7 +2,6 @@ import logging
 
 from peewee import DoesNotExist
 
-from common import config
 from model.entity.channels_entity import ChannelsEntity
 import requests
 
@@ -19,11 +18,11 @@ def get_base_url(channel):
             return "https://api.openai-sb.com"
         else:
             logging.warning("渠道base_url为空")
-    return channel.get('base_url','')
+    return channel.get('base_url', '')
 
 
 async def get_channel_info(model_name: str):
-    channel = ChannelsEntity.get_by_model(model_name)
+    channel = await ChannelsEntity.get_by_model(model_name)
     if channel is None:
         raise Exception("渠道不存在")
 
@@ -99,7 +98,7 @@ def update_channel_response_time(channel_id, response_time):
 
 def do_update_channel(channel_id, data: AddChannelPo):
     try:
-        channel = ChannelsEntity.get_by_id(channel_id)
+        channel = ChannelsEntity.get_channel_by_id_entity(channel_id)
         channel.key = data.key
         channel.type = data.type
         channel.name = data.name
@@ -113,7 +112,7 @@ def do_update_channel(channel_id, data: AddChannelPo):
 
 def get_channel_info_by_id(channel_id: int):
     try:
-        channel = ChannelsEntity.get_by_id(channel_id)
-        return channel.__dict__.get('__data__')
+        channel = ChannelsEntity.get_channel_by_id(channel_id)
+        return channel
     except DoesNotExist:
         return None
