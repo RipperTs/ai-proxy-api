@@ -63,7 +63,7 @@ async def do_openai_proxy(request: Request):
         cookies=request.cookies,
         timeout=120.0 if stream else 600.0
     )
-    r = await client.send(req, stream=True)
+    r = await client.send(req, stream=True, follow_redirects=False)
     if r.status_code != 200:
         raise Exception(f"请求失败, 状态码: {r.status_code}")
 
