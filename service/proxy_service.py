@@ -65,7 +65,7 @@ async def do_openai_proxy(request: Request):
     )
     r = await client.send(req, stream=True, follow_redirects=False)
     if r.status_code != 200:
-        err_msg = f"请求失败! 请求地址: {channel['base_url']}{url_path}, 请求状态码: {r.status_code}"
+        err_msg = f"请求失败! 请求地址: {channel['base_url']}{url_path}, 请求状态码: {r.status_code}, 返回内容: {r.text}"
         logger.error(err_msg)
         raise Exception(err_msg)
 
