@@ -12,12 +12,14 @@ import logging
 
 from starlette.responses import Response
 
+from handler.log_handler import get_log_handler
 from service.channels_service import get_channel_info
 from service.logs_service import insert_log
 from service.token_service import get_token_info
 import tenacity
 
 logger = logging.getLogger(__name__)
+logger.addHandler(get_log_handler())
 
 class ChatMessage(BaseModel):
     role: Literal["user", "assistant", "system"]
@@ -50,7 +52,7 @@ class ChatCompletionResponse(BaseModel):
 
 @tenacity.retry(wait=tenacity.wait_fixed(1), stop=tenacity.stop_after_attempt(3), reraise=True,
                 retry=tenacity.retry_if_exception_type(Exception),
-                before_sleep=tenacity.before_sleep_log(logger, logging.DEBUG))
+                before_sleep=tenacity.before_sleep_log(logger, logging.WARNING))
 async def do_lingshi_qwen_proxy(request: Request):
     global model, tokenizer
 
@@ -134,6 +136,7 @@ async def predict(query,messages, model_name: str, api_key: str, temperature: fl
         if response.status_code != HTTPStatus.OK:
             new_text = "出错了, 错误码: {}, 请求ID: {}, 信息: {}".format(response.status_code, response.request_id,
                                                                          response.message)
+            logger.error(new_text)
             choice_data = ChatCompletionResponseStreamChoice(
                 index=0,
                 delta=DeltaMessage(content=new_text),
