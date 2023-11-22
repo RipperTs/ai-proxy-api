@@ -3,7 +3,7 @@ from logging.handlers import TimedRotatingFileHandler
 import os
 
 
-def register_log_handler():
+def get_log_handler():
     # 获取当前脚本所在的目录路径
     current_dir = os.path.dirname(os.path.abspath(__file__))
     parent_dir = os.path.dirname(current_dir)
@@ -17,6 +17,9 @@ def register_log_handler():
 
     formatter = logging.Formatter("%(asctime)s [%(levelname)s] [%(filename)s:%(lineno)d] %(message)s")
     handler.setFormatter(formatter)
+    return handler
 
+
+def register_log_handler():
     logger = logging.getLogger()
-    logger.addHandler(handler)
+    logger.addHandler(get_log_handler())

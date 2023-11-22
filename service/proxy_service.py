@@ -5,6 +5,7 @@ from fastapi.responses import StreamingResponse
 from starlette.background import BackgroundTask
 
 from common import config
+from handler.log_handler import get_log_handler
 from service.channels_service import get_channel_info
 from service.logs_service import insert_log
 from service.token_service import get_token_info
@@ -14,6 +15,7 @@ import tenacity
 
 client = httpx.AsyncClient()
 logger = logging.getLogger(__name__)
+logger.addHandler(get_log_handler())
 
 
 @tenacity.retry(wait=tenacity.wait_fixed(1), stop=tenacity.stop_after_attempt(3), reraise=True,
@@ -65,7 +67,7 @@ async def do_openai_proxy(request: Request):
     )
     r = await client.send(req, stream=True, follow_redirects=False)
     if r.status_code != 200:
-        err_msg = f"请求失败! 请求地址: {channel['base_url']}{url_path}, 请求状态码: {r.status_code}, 返回内容: {r.text}"
+        err_msg = f"请求失败! 请求地址: {channel['base_url']}{url_path}, 请求状态码: {r.status_code}"
         logger.error(err_msg)
         raise Exception(err_msg)
 
