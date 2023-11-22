@@ -12,7 +12,6 @@ from service.token_service import get_token_info
 import logging
 import httpx
 import tenacity
-import time
 
 client = httpx.AsyncClient()
 logger = logging.getLogger(__name__)
@@ -30,10 +29,7 @@ async def do_openai_proxy(request: Request):
     """
     url_path = request.url.path
     headers = dict(request.headers)
-
-    start_time = int(time.time() * 1000)
     token_info = await get_token_info(headers['authorization'])
-    logger.warning(f"验证token耗时: {int(time.time() * 1000) - start_time}ms")
     # 获取请求的参数
     data = request.state.request_data
     stream = data.get('stream', False)
@@ -44,10 +40,7 @@ async def do_openai_proxy(request: Request):
         raise Exception("model参数不能为空")
 
     # 获取渠道信息
-    start_time = int(time.time() * 1000)
     channel = await get_channel_info(model_name)
-    logger.warning(f"获取渠道信息耗时: {int(time.time() * 1000) - start_time}ms")
-
     if 'host' in headers:
         del headers['host']
     if 'content-length' in headers:
@@ -63,7 +56,6 @@ async def do_openai_proxy(request: Request):
 
     logging.warning(
         f"代理请求: {channel['base_url']}{url_path}, 模型: {model_name}, azure: {config.use_azure_model}")
-    start_time = int(time.time() * 1000)
     req = client.build_request(
         method=request.method,
         url=f"{channel['base_url']}{url_path}",
@@ -74,7 +66,6 @@ async def do_openai_proxy(request: Request):
         timeout=120.0 if stream else 600.0
     )
     r = await client.send(req, stream=True, follow_redirects=False)
-    logger.warning(f"代理请求耗时: {int(time.time() * 1000) - start_time}ms")
     if r.status_code != 200:
         err_msg = f"请求失败! 请求地址: {channel['base_url']}{url_path}, 请求状态码: {r.status_code}"
         logger.error(err_msg)
