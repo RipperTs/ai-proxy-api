@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 @tenacity.retry(wait=tenacity.wait_fixed(1), stop=tenacity.stop_after_attempt(3), reraise=True,
                 retry=tenacity.retry_if_exception_type(Exception),
-                before_sleep=tenacity.before_sleep_log(logger, logging.DEBUG))
+                before_sleep=tenacity.before_sleep_log(logger, logging.WARNING))
 async def do_openai_proxy(request: Request):
     """
     OpenAI转发代理请求操作
