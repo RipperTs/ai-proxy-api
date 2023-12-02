@@ -50,7 +50,7 @@
           :page-size.sync="limit"
           :current-page.sync="page"
           layout="prev, pager, next"
-          :total="5000">
+          :total="total">
         </el-pagination>
       </div>
     </div>
@@ -67,6 +67,7 @@ export default {
       tableData: [],
       page: 1,
       limit: 30,
+      total: 0,
       isLoading: true
     }
   },
@@ -76,8 +77,9 @@ export default {
   methods: {
 
     getLogs() {
-      _apiGet('/api/log-list', {page: this.page, limit: this.limit}).then(res => {
-        this.tableData = res.data
+      _apiGet('/api/v1/log/log-list', {page: this.page, limit: this.limit}).then(res => {
+        this.tableData = res.data.list
+        this.total = res.data.total_count
         this.isLoading = false
       }).catch(() => {
         this.isLoading = false

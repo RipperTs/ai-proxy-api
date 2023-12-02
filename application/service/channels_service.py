@@ -46,6 +46,8 @@ async def get_channel_list(page=1, limit=30):
     query = ChannelsEntity.filter()
     results = await query.offset(offset).order_by("-id").limit(limit).all()
     total_count = await query.count()
+    for res in results:
+        res.created_time = res.created_time.strftime('%Y-%m-%d %H:%M:%S')
     return results, total_count
 
 

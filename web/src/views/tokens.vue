@@ -21,8 +21,11 @@
           align="center"
           label="状态">
           <template slot-scope="scope">
-            <el-tag type="success" class="cursor" @click="setStatus(scope.row,2)" v-if="scope.row.status === 1">已启用</el-tag>
-            <el-tag type="danger" class="cursor" @click="setStatus(scope.row,1)" v-else>已禁用</el-tag>
+            <el-tag type="success" class="cursor" @click="setStatus(scope.row,2)"
+                    v-if="scope.row.status === 1">已启用
+            </el-tag>
+            <el-tag type="danger" class="cursor" @click="setStatus(scope.row,1)" v-else>已禁用
+            </el-tag>
           </template>
         </el-table-column>
         <el-table-column
@@ -83,6 +86,7 @@
 
 <script>
 import {_apiGet, _apiPost} from "@/api/api";
+
 export default {
   components: {},
   data() {
@@ -90,6 +94,7 @@ export default {
       tableData: [],
       page: 1,
       limit: 30,
+      total: 0,
       isLoading: true,
       dialogFormVisible: false,
       form: {
@@ -108,17 +113,17 @@ export default {
 
     setStatus(row, status) {
       this.isLoading = true
-      _apiGet(`/api/token/${row.id}/status`, {status: status}).then(res => {
+      _apiGet(`/api/v1/token/${row.id}/status`, {status: status}).then(res => {
         this.getTokenList()
       })
     },
 
-    currentChange(e){
+    currentChange(e) {
       this.page = e
       this.getTokenList()
     },
 
-    copyKey(row){
+    copyKey(row) {
       this.$copyText(row.key)
         .then(() => {
           this.$message.success('秘钥已成功复制到剪贴板')
@@ -129,8 +134,9 @@ export default {
     },
 
     getTokenList() {
-      _apiGet('/api/token-list', {page: this.page, limit: this.limit}).then(res => {
-        this.tableData = res.data
+      _apiGet('/api/v1/token/token-list', {page: this.page, limit: this.limit}).then(res => {
+        this.tableData = res.data.list
+        this.total = res.data.total_count
         this.isLoading = false
       }).catch(() => {
         this.isLoading = false
@@ -143,14 +149,14 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        _apiPost(`/api/${row.id}/del-token`).then(res => {
+        _apiPost(`/api/v1/token/${row.id}/del-token`).then(res => {
           this.getTokenList()
         })
       })
     },
 
     onSubmit() {
-      _apiPost('/api/add-token', this.form).then(res => {
+      _apiPost('/api/v1/token/add-token', this.form).then(res => {
         this.getTokenList()
         this.dialogFormVisible = false
       })

@@ -62,7 +62,7 @@ export default {
   },
   methods: {
     login() {
-      _apiPost('/api/login-user', this.form).then(res => {
+      _apiPost('/api/v1/user/login-user', this.form).then(res => {
         this.$ls.set('user_info', res.data)
         this.$router.push({path: '/'})
       })

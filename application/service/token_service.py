@@ -34,6 +34,8 @@ async def get_token_list(page=1, limit=30):
     total_count = await query.count()
     for item in results:
         item.key = f"sk-{item.key}"
+        item.created_time = item.created_time.strftime('%Y-%m-%d %H:%M:%S')
+        item.expired_time = item.expired_time.strftime('%Y-%m-%d %H:%M:%S') if item.expired_time is not None else None
 
     return results, total_count
 

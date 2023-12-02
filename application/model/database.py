@@ -8,7 +8,9 @@ async def init_database():
     """
     Initialize database connection.
     """
-    await Tortoise.init(db_url=config.db_url, modules={"models": load_all_models()})
+    await Tortoise.init(db_url=config.db_url,
+                        modules={"models": load_all_models()},
+                        timezone="Asia/Shanghai")
     await Tortoise.generate_schemas()
 
 

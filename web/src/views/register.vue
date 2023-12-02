@@ -9,24 +9,29 @@
                 <h1>用户注册</h1>
                 <div class="input-group m-b-1">
                   <span class="input-group-addon"><i class="el-icon-user"></i></span>
-                  <input type="text" class="form-control" placeholder="请输入用户名" v-model="form.username">
+                  <input type="text" class="form-control" placeholder="请输入用户名"
+                         v-model="form.username">
                 </div>
                 <div class="input-group m-b-1">
                   <span class="input-group-addon"><i class="el-icon-message"></i></span>
-                  <input type="text" class="form-control" placeholder="请输入邮箱" v-model="form.email">
+                  <input type="text" class="form-control" placeholder="请输入邮箱"
+                         v-model="form.email">
                 </div>
                 <div class="input-group m-b-2">
                   <span class="input-group-addon"><i class="el-icon-lock"></i></span>
-                  <input type="password"  class="form-control" placeholder="请输入密码" v-model="form.password">
+                  <input type="password" class="form-control" placeholder="请输入密码"
+                         v-model="form.password">
                 </div>
                 <div class="input-group m-b-2">
                   <span class="input-group-addon"><i class="el-icon-lock"></i></span>
-                  <input type="password" class="form-control" placeholder="请再次输入密码" v-model="form.re_password">
+                  <input type="password" class="form-control" placeholder="请再次输入密码"
+                         v-model="form.re_password">
                 </div>
                 <div class="row">
                   <el-row>
                     <el-col :span="12">
-                      <el-button type="primary" class="btn btn-primary p-x-2" @click="login">注 册</el-button>
+                      <el-button type="primary" class="btn btn-primary p-x-2" @click="login">注 册
+                      </el-button>
                     </el-col>
                   </el-row>
                 </div>
@@ -38,7 +43,9 @@
               <div class="card-block">
                 <h2>登录</h2>
                 <p>如果您已经拥有此平台账号,且账号已经通过验证,可以直接登录!</p>
-                <el-button type="danger" class="btn btn-primary active m-t-1" @click="toLogin"> 立即登录</el-button>
+                <el-button type="danger" class="btn btn-primary active m-t-1" @click="toLogin">
+                  立即登录
+                </el-button>
               </div>
             </div>
           </el-col>
@@ -58,7 +65,8 @@ export default {
     return {
       form: {
         username: '',
-        password: ''
+        password: '',
+        re_password: '',
       }
     }
   },
@@ -90,13 +98,13 @@ export default {
         this.$message.error('邮箱格式不正确')
         return false
       }
-      _apiPost('/api/register-user', this.form).then(res => {
+      _apiPost('/api/v1/user/register-user', this.form).then(res => {
         this.$message.success('注册成功,请联系管理员进行验证后才可正常使用.')
         this.$router.push({path: '/login'})
       })
     },
 
-    toLogin(){
+    toLogin() {
       this.$router.push({path: '/login'})
     },
 

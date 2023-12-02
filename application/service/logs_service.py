@@ -14,6 +14,8 @@ async def get_log_list(page=1, limit=30):
     results = await query.offset(offset).order_by("-id").limit(limit).all()
     # 获取查询结果总数（用于分页）
     total_count = await query.count()
+    for res in results:
+        res.created_time = res.created_time.strftime('%Y-%m-%d %H:%M:%S')
     return results, total_count
 
 

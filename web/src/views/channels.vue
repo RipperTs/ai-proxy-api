@@ -83,7 +83,7 @@
           :page-size.sync="limit"
           :current-page.sync="page"
           layout="prev, pager, next"
-          :total="100">
+          :total="total">
         </el-pagination>
       </div>
     </div>
@@ -133,6 +133,7 @@ export default {
       channelList: [],
       page: 1,
       limit: 30,
+      total: 0,
       isLoading: true,
       dialogFormVisible: false,
       form: {
@@ -152,7 +153,7 @@ export default {
 
     setStatus(row, status) {
       this.isLoading = true
-      _apiGet(`/api/channel/${row.id}/status`, {status: status}).then(res => {
+      _apiGet(`/api/v1/channel/${row.id}/status`, {status: status}).then(res => {
         this.getChannelsList()
       })
     },
@@ -163,8 +164,9 @@ export default {
     },
 
     getChannelsList() {
-      _apiGet('/api/channel-list', {page: this.page, limit: this.limit}).then(res => {
-        this.channelList = res.data
+      _apiGet('/api/v1/channel/channel-list', {page: this.page, limit: this.limit}).then(res => {
+        this.channelList = res.data.list
+        this.total = res.data.total_count
         this.isLoading = false
       }).catch(() => {
         this.isLoading = false
@@ -172,13 +174,13 @@ export default {
     },
 
     testChannel(row) {
-      _apiGet('/api/check-channel', {channel_id: row.id}).then(res => {
+      _apiGet('/api/v1/channel/check-channel', {channel_id: row.id}).then(res => {
         this.getChannelsList()
       })
     },
 
     updateBalance(row) {
-      _apiGet('/api/balance', {channel_id: row.id}).then(res => {
+      _apiGet('/api/v1/channel/balance', {channel_id: row.id}).then(res => {
         this.getChannelsList()
       })
     },
@@ -189,14 +191,14 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        _apiPost(`/api/${row.id}/del-channel`).then(res => {
+        _apiPost(`/api/v1/channel/${row.id}/del-channel`).then(res => {
           this.getChannelsList()
         })
       })
     },
 
     onSubmit() {
-      _apiPost('/api/add-channel', this.form).then(res => {
+      _apiPost('/api/v1/channel/add-channel', this.form).then(res => {
         this.getChannelsList()
         this.dialogFormVisible = false
       })
