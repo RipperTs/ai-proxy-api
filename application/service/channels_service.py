@@ -63,7 +63,7 @@ async def get_channel_balance(channel_id: int):
     if channel.type == 2:
         # ohmygpt
         async with httpx.AsyncClient() as client:
-            response = await client.post(f"{channel.base_url}/api/v1/user/admin/balance",
+            response = await client.post(f"{get_base_url(channel.__dict__)}/api/v1/user/admin/balance",
                                          headers={"authorization": "Bearer " + channel.key}, timeout=20)
             if response.status_code != 200:
                 raise AssertionError(f"获取渠道余额失败, 请求状态码: {response.status_code}, 错误信息: {response.text}")
