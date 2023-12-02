@@ -114,7 +114,7 @@ async def do_check_channel(channel_id: int):
     # 记录开始时间
     start_time = time.time()
     async with httpx.AsyncClient() as client:
-        response = await client.post(f"{channel.base_url}/v1/chat/completions", headers=headers,
+        response = await client.post(f"{get_base_url(channel.__dict__)}/v1/chat/completions", headers=headers,
                                      json=test_request_data, timeout=10)
         if response.status_code != 200:
             raise AssertionError(f"请求失败: {response.text}")
