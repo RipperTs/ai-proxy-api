@@ -2,27 +2,16 @@ import traceback
 
 from fastapi import FastAPI, Request
 from fastapi.encoders import jsonable_encoder
-from fastapi.middleware.cors import CORSMiddleware
 from fastapi.exceptions import RequestValidationError, HTTPException
 import logging
 
+from httpx import HTTPStatusError
 from starlette import status
 from starlette.responses import JSONResponse
 
-from service.lingshi_qwen_service import do_lingshi_qwen_proxy
-from service.proxy_service import do_openai_proxy
-from service.users_sercice import get_current_user
-
-
-def register_all_handler(app: FastAPI):
-    """
-    注册全局handler
-    :param app:
-    :return:
-    """
-    register_exception(app)
-    register_cors(app)
-    register_middleware(app)
+from application.service.lingshi_qwen_service import do_lingshi_qwen_proxy
+from application.service.proxy_service import do_openai_proxy
+from application.service.users_sercice import get_current_user
 
 
 def register_exception(app: FastAPI):
@@ -63,6 +52,7 @@ def register_exception(app: FastAPI):
             content={"code": 500, "data": None, "msg": str(exc)},
         )
 
+
     # 捕获断言错误，用于返回错误状态
     @app.exception_handler(AssertionError)
     async def asser_exception_handler(request: Request, exc: AssertionError):
@@ -70,23 +60,7 @@ def register_exception(app: FastAPI):
         logging.info(f"------------------------{exc.args}")
         state = exc.args[0] if exc.args else 0
         return JSONResponse(status_code=status.HTTP_200_OK,
-                            content={"code": 422, "data": {"tip": state}, "msg": "fail"}, )
-
-
-def register_cors(app: FastAPI):
-    """
-    支持跨域
-    :param app:
-    :return:
-    """
-
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=['*'],
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
+                            content={"code": 422, "data": None, "msg": state}, )
 
 
 def register_middleware(app: FastAPI):
@@ -100,8 +74,7 @@ def register_middleware(app: FastAPI):
     async def proxy(request: Request, call_next):
         headers = dict(request.headers)
         if request.url.path.startswith("/ai-proxy"):
-            if request.url.path.startswith("/ai-proxy/api/login-user") or request.url.path.startswith(
-                    "/ai-proxy/api/register-user"):
+            if request.url.path in ['/ai-proxy/api/v1/user/login-user', '/ai-proxy/api/v1/user/register-user']:
                 return await call_next(request)
             if 'ai-proxy-token' not in headers:
                 return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED,

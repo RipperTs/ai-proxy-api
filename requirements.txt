@@ -1,7 +1,4 @@
 urllib3==1.26.15
-pymysql==1.1.0
-peewee==3.16.2
-requests
 tiktoken
 fastapi>=0.104.1
 uvicorn
@@ -15,3 +12,7 @@ bcrypt
 dashscope
 sse_starlette
 pydantic==2.2.1
+tortoise-orm
+aiomysql
+loguru
+ujson

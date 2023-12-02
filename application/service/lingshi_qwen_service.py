@@ -12,14 +12,13 @@ import logging
 
 from starlette.responses import Response
 
-from handler.log_handler import get_log_handler
-from service.channels_service import get_channel_info
-from service.logs_service import insert_log
-from service.token_service import get_token_info
 import tenacity
 
+from application.service.channels_service import get_channel_info
+from application.service.logs_service import insert_log
+from application.service.token_service import get_token_info
+
 logger = logging.getLogger(__name__)
-logger.addHandler(get_log_handler())
 
 class ChatMessage(BaseModel):
     role: Literal["user", "assistant", "system"]

@@ -4,21 +4,20 @@ import json
 from fastapi.responses import StreamingResponse
 from starlette.background import BackgroundTask
 
-from common import config
-from handler.log_handler import get_log_handler
-from service.channels_service import get_channel_info
-from service.logs_service import insert_log
-from service.token_service import get_token_info
+from application.common import config
 import logging
 import httpx
 import tenacity
 
+from application.service.channels_service import get_channel_info
+from application.service.logs_service import insert_log
+from application.service.token_service import get_token_info
+
 client = httpx.AsyncClient()
 logger = logging.getLogger(__name__)
-logger.addHandler(get_log_handler())
 
 
-@tenacity.retry(wait=tenacity.wait_fixed(1), stop=tenacity.stop_after_attempt(3), reraise=True,
+@tenacity.retry(wait=tenacity.wait_fixed(1), stop=tenacity.stop_after_attempt(5), reraise=True,
                 retry=tenacity.retry_if_exception_type(Exception),
                 before_sleep=tenacity.before_sleep_log(logger, logging.WARNING))
 async def do_openai_proxy(request: Request):
@@ -36,7 +35,6 @@ async def do_openai_proxy(request: Request):
     model_name = data.get('model', '')
 
     if model_name is None or len(model_name) == 0:
-        logging.error("model参数不能为空")
         raise Exception("model参数不能为空")
 
     # 获取渠道信息
@@ -66,10 +64,6 @@ async def do_openai_proxy(request: Request):
         timeout=120.0 if stream else 600.0
     )
     r = await client.send(req, stream=True, follow_redirects=False)
-    if r.status_code != 200:
-        err_msg = f"请求失败! 请求地址: {channel['base_url']}{url_path}, 请求状态码: {r.status_code}"
-        logger.error(err_msg)
-        raise Exception(err_msg)
 
     # 记录请求日志
     await insert_log(data.get('messages', []), model_name, channel, token_info)
