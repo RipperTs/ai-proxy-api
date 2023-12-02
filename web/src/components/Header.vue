@@ -43,13 +43,9 @@
 
     <el-dialog title="更改密码" :visible.sync="dialogFormVisible">
       <el-form :model="form">
-        <el-form-item label="旧密码" :label-width="formLabelWidth">
-          <el-input v-model="form.old_password" show-password style="width:300px" type="password"
+        <el-form-item label="新密码" :label-width="formLabelWidth">
+          <el-input v-model="form.password" show-password style="width:300px" type="password"
                     autocomplete="on"></el-input>
-        </el-form-item>
-        <el-form-item label="更改密码" :label-width="formLabelWidth">
-          <el-input v-model="form.new_password" type="password" show-password style="width:300px"
-                    autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="再次确认" :label-width="formLabelWidth">
           <el-input v-model="form.re_password" type="password" show-password style="width:300px"
@@ -83,8 +79,7 @@ export default {
       menuName: '/',
       dialogFormVisible: false,
       form: {
-        email: '',
-        'old_password': '',
+        password: '',
         new_password: '',
       },
       formLabelWidth: '100px'
@@ -108,15 +103,11 @@ export default {
   methods: {
 
     onSubmit() {
-      if (this.form.old_password.trim() === '') {
-        this.$message.error('请输入旧密码')
-        return false
-      }
-      if (this.form.new_password.trim() === '') {
+      if (this.form.password.trim() === '') {
         this.$message.error('请输入新密码')
         return false
       }
-      if (this.form.new_password.trim().length < 6) {
+      if (this.form.password.trim().length < 6) {
         this.$message.error('密码长度不能小于6位')
         return false
       }
@@ -124,12 +115,11 @@ export default {
         this.$message.error('请再次输入新密码')
         return false
       }
-      if (this.form.new_password !== this.form.re_password) {
+      if (this.form.password !== this.form.re_password) {
         this.$message.error('两次输入的密码不一致')
         return false
       }
-      this.form.email  = this.user_info.email
-      _apiPost('/api/update-password', this.form).then(res => {
+      _apiPost('/api/v1/user/update-password', this.form).then(res => {
         this.$message.success('密码修改成功,请重新登录')
         this.dialogFormVisible = false
         this.$ls.set('user_info', '')
