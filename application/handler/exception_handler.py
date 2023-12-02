@@ -5,13 +5,13 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError, HTTPException
 import logging
 
-from httpx import HTTPStatusError
 from starlette import status
 from starlette.responses import JSONResponse
 
 from application.service.lingshi_qwen_service import do_lingshi_qwen_proxy
 from application.service.proxy_service import do_openai_proxy
 from application.service.users_sercice import get_current_user
+import time
 
 
 def register_exception(app: FastAPI):
@@ -52,7 +52,6 @@ def register_exception(app: FastAPI):
             content={"code": 500, "data": None, "msg": str(exc)},
         )
 
-
     # 捕获断言错误，用于返回错误状态
     @app.exception_handler(AssertionError)
     async def asser_exception_handler(request: Request, exc: AssertionError):
@@ -72,17 +71,21 @@ def register_middleware(app: FastAPI):
 
     @app.middleware("http")
     async def proxy(request: Request, call_next):
+        start_time = time.time()
         headers = dict(request.headers)
         if request.url.path.startswith("/ai-proxy"):
             if request.url.path in ['/ai-proxy/api/v1/user/login-user', '/ai-proxy/api/v1/user/register-user']:
-                return await call_next(request)
+                response = await call_next(request)
+                return recording_time(start_time, request, response)
+
             if 'ai-proxy-token' not in headers:
                 return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED,
                                     content={"code": 401, "data": None, "msg": "token不存在"})
             token = headers['ai-proxy-token']
             user_info = await get_current_user(token)
             request.state.user_info = user_info
-            return await call_next(request)
+            response = await call_next(request)
+            return recording_time(start_time, request, response)
 
         # 处理请求参数
         if "application/json" in headers['content-type']:
@@ -94,6 +97,22 @@ def register_middleware(app: FastAPI):
         request.state.request_data = request_data
         model_name = request_data.get('model', '')
         if model_name == "qwen-14b-chat" or model_name == "qwen-plus" or model_name == "qwen-7b-chat" or model_name == "qwen-turbo":
-            return await do_lingshi_qwen_proxy(request)
+            response = await do_lingshi_qwen_proxy(request)
+            return recording_time(start_time, request, response)
 
-        return await do_openai_proxy(request)
+        response = await do_openai_proxy(request)
+        return recording_time(start_time, request, response)
+
+
+def recording_time(start_time, request, response):
+    """
+    记录请求响应时间
+    :param start_time:
+    :param request:
+    :param response:
+    :return:
+    """
+    process_time = time.time() - start_time
+    response.headers["X-Process-Time"] = str(round(process_time, 5))
+    logging.info(f"访问记录:{request.method} url:{request.url}  耗时:{str(round(process_time, 5))}")
+    return response
