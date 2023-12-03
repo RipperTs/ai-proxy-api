@@ -83,7 +83,7 @@ async def do_lingshi_qwen_proxy(request: Request):
         generate = predict(query,prev_messages, model_name, channel['key'], data.get('temperature', 0.5),
                            data.get('top_p', 0.9))
         # 记录请求日志
-        await insert_log(data.get('messages', []), model_name, channel, token_info)
+        await insert_log(data, model_name, channel, token_info)
         return EventSourceResponse(generate, media_type="text/event-stream")
 
     responses = Generation.call(
@@ -103,7 +103,7 @@ async def do_lingshi_qwen_proxy(request: Request):
     )
 
     # 记录请求日志
-    await insert_log(data.get('messages', []), model_name, channel, token_info)
+    await insert_log(data, model_name, channel, token_info)
     model_result = ChatCompletionResponse(model=model_name, choices=[choice_data], object="chat.completion")
     return Response(model_result.model_dump_json(exclude_unset=True), media_type="application/json")
 

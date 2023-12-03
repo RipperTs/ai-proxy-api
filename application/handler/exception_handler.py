@@ -71,24 +71,21 @@ def register_middleware(app: FastAPI):
 
     @app.middleware("http")
     async def proxy(request: Request, call_next):
-        start_time = time.time()
         headers = dict(request.headers)
         if request.url.path.startswith("/ai-proxy"):
             if request.url.path in ['/ai-proxy/api/v1/user/login-user', '/ai-proxy/api/v1/user/register-user']:
-                response = await call_next(request)
-                return recording_time(start_time, request, response)
+                return await call_next(request)
 
             if 'ai-proxy-token' not in headers:
                 return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED,
                                     content={"code": 401, "data": None, "msg": "token不存在"})
-            token = headers['ai-proxy-token']
+            token = headers.get('ai-proxy-token', '')
             user_info = await get_current_user(token)
             request.state.user_info = user_info
-            response = await call_next(request)
-            return recording_time(start_time, request, response)
+            return await call_next(request)
 
         # 处理请求参数
-        if "application/json" in headers['content-type']:
+        if "application/json" in headers.get('content-type', 'application/x-www-form-urlencoded'):
             request_data = await request.json()
         else:
             request_data = await request.form()
@@ -97,22 +94,7 @@ def register_middleware(app: FastAPI):
         request.state.request_data = request_data
         model_name = request_data.get('model', '')
         if model_name == "qwen-14b-chat" or model_name == "qwen-plus" or model_name == "qwen-7b-chat" or model_name == "qwen-turbo":
-            response = await do_lingshi_qwen_proxy(request)
-            return recording_time(start_time, request, response)
+            return await do_lingshi_qwen_proxy(request)
 
-        response = await do_openai_proxy(request)
-        return recording_time(start_time, request, response)
+        return await do_openai_proxy(request)
 
-
-def recording_time(start_time, request, response):
-    """
-    记录请求响应时间
-    :param start_time:
-    :param request:
-    :param response:
-    :return:
-    """
-    process_time = time.time() - start_time
-    response.headers["X-Process-Time"] = str(round(process_time, 5))
-    logging.info(f"访问记录:{request.method} url:{request.url}  耗时:{str(round(process_time, 5))}")
-    return response

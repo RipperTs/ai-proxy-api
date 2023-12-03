@@ -19,9 +19,14 @@ async def get_log_list(page=1, limit=30):
     return results, total_count
 
 
-async def insert_log(messages: list, model_name: str, channel: dict, token_info: TokensEntity):
+async def insert_log(data: dict, model_name: str, channel: dict, token_info: TokensEntity):
     try:
         content = ''
+        messages = data.get('messages', [])
+        input = data.get('input', '')
+        if len(messages) == 0:
+            content = input
+
         for message in messages:
             if isinstance(message['content'], str):
                 content += message['content']

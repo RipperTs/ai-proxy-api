@@ -66,6 +66,6 @@ async def do_openai_proxy(request: Request):
     r = await client.send(req, stream=True, follow_redirects=False)
 
     # 记录请求日志
-    await insert_log(data.get('messages', []), model_name, channel, token_info)
+    await insert_log(data, model_name, channel, token_info)
     return StreamingResponse(r.aiter_raw(), background=BackgroundTask(r.aclose),
                              status_code=r.status_code, headers=dict(r.headers), media_type='text/event-stream')
