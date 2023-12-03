@@ -16,3 +16,4 @@ tortoise-orm
 aiomysql
 loguru
 ujson
+apscheduler

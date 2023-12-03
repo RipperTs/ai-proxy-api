@@ -17,6 +17,7 @@ __all__ = [
     "server_workers",
     "reload",
     "db_url",
+    "sync_balance_interval"
 ]
 
 # 重置系统变量，在不需要设置的时候不设置环境变量，以免引起全局代理报错
@@ -39,3 +40,5 @@ azure_chat_model = os.environ.get("AZURE_CHAT_MODEL")
 
 secret_key = os.environ.get('SECRET_KEY')
 access_token_expire_minutes = int(os.environ.get("ACCESS_TOKEN_EXPIRE_MINUTES"))
+
+sync_balance_interval = int(os.environ.get("SYNC_BALANCE_INTERVAL", 3600))
