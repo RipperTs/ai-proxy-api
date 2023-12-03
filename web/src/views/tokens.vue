@@ -6,8 +6,9 @@
       </div>
       <el-table
         :data="tableData"
-        height="700"
+        height="75vh"
         stripe
+        ref="table"
         border
         v-loading="isLoading"
         :header-cell-style="{background: '#f3f3f3',fontWeight: 'bold',fontSize: '14px'}"
@@ -54,7 +55,7 @@
           :page-size.sync="limit"
           :current-page.sync="page"
           layout="prev, pager, next"
-          :total="100">
+          :total="total">
         </el-pagination>
       </div>
     </div>
@@ -120,7 +121,11 @@ export default {
 
     currentChange(e) {
       this.page = e
+      this.isLoading = true
       this.getTokenList()
+      this.$nextTick(() => {
+        this.$refs.table.bodyWrapper.scrollTop = 0
+      })
     },
 
     copyKey(row) {
@@ -168,7 +173,6 @@ export default {
 <style lang="scss" scoped>
 .table-box {
   margin-top: 30px;
-  min-height: 700px;
   border-radius: 5px;
 }
 

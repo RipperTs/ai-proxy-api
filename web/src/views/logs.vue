@@ -3,8 +3,9 @@
     <div class="table-box">
       <el-table
         :data="tableData"
-        height="720"
+        height="78vh"
         stripe
+        ref="table"
         border
         v-loading="isLoading"
         :header-cell-style="{background: '#f3f3f3',fontWeight: 'bold',fontSize: '14px'}"
@@ -66,7 +67,7 @@ export default {
     return {
       tableData: [],
       page: 1,
-      limit: 30,
+      limit: 60,
       total: 0,
       isLoading: true
     }
@@ -88,7 +89,11 @@ export default {
 
     currentChange(e) {
       this.page = e
+      this.isLoading = true
       this.getLogs()
+      this.$nextTick(() => {
+        this.$refs.table.bodyWrapper.scrollTop = 0
+      })
     },
   },
 }
@@ -96,7 +101,6 @@ export default {
 <style lang="scss" scoped>
 .table-box {
   margin-top: 30px;
-  min-height: 700px;
   border-radius: 5px;
 }
 

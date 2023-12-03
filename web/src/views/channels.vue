@@ -6,8 +6,9 @@
       </div>
       <el-table
         :data="channelList"
-        height="700"
+        height="75vh"
         stripe
+        ref="table"
         border
         v-loading="isLoading"
         :header-cell-style="{background: '#f3f3f3',fontWeight: 'bold',fontSize: '14px'}"
@@ -68,10 +69,13 @@
         <el-table-column
           label="操作">
           <template slot-scope="scope">
-            <el-button type="success" @click="testChannel(scope.row)" :disabled="scope.row.type === 5" size="mini">测试</el-button>
-            <el-button type="warning" @click="updateBalance(scope.row)" :disabled="scope.row.type === 5" size="mini">更新余额
+            <el-button type="success" @click="testChannel(scope.row)"
+                       :disabled="scope.row.type === 5" size="mini">测试
             </el-button>
-            <el-button type="primary" size="mini" disabled>编辑</el-button>
+            <el-button type="warning" @click="updateBalance(scope.row)"
+                       :disabled="scope.row.type === 5" size="mini">更新余额
+            </el-button>
+            <el-button type="primary" size="mini" @click="doEdit(scope.row.id)">编辑</el-button>
             <el-button type="danger" @click="delChannel(scope.row)" size="mini">删除</el-button>
           </template>
         </el-table-column>
@@ -88,7 +92,7 @@
       </div>
     </div>
 
-    <el-dialog title="添加渠道" :visible.sync="dialogFormVisible">
+    <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible" @close="closeDialog">
       <el-form :model="form">
         <el-form-item label="渠道名称" :label-width="formLabelWidth">
           <el-input v-model="form.name" class="input-width"></el-input>
@@ -111,7 +115,8 @@
           <el-input v-model="form.key" class="input-width"></el-input>
         </el-form-item>
         <el-form-item label="请求地址" :label-width="formLabelWidth">
-          <el-input v-model="form.base_url" :disabled="form.type === 5" class="input-width"></el-input>
+          <el-input v-model="form.base_url" :disabled="form.type === 5"
+                    class="input-width"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -142,6 +147,9 @@ export default {
         models: 'gpt-3.5-turbo,gpt-3.5-turbo-0301,gpt-3.5-turbo-0613,gpt-3.5-turbo-16k,gpt-3.5-turbo-16k-0613,gpt-3.5-turbo-instruct,text-embedding-ada-002,text-davinci-003,text-davinci-002,gpt-3.5-turbo-1106',
       },
       formLabelWidth: '100px',
+      is_edit: false,
+      dialogTitle: '添加渠道',
+      edit_channel_id: 0,
     }
   },
   created() {
@@ -150,6 +158,29 @@ export default {
   mounted() {
   },
   methods: {
+
+    closeDialog() {
+      this.is_edit = false
+      this.dialogTitle = '添加渠道'
+      this.form = {
+        name: '',
+        type: 1,
+        models: 'gpt-3.5-turbo,gpt-3.5-turbo-0301,gpt-3.5-turbo-0613,gpt-3.5-turbo-16k,gpt-3.5-turbo-16k-0613,gpt-3.5-turbo-instruct,text-embedding-ada-002,text-davinci-003,text-davinci-002,gpt-3.5-turbo-1106',
+      }
+      this.edit_channel_id = 0
+    },
+
+    doEdit(id) {
+      this.dialogTitle = '编辑渠道'
+      this.is_edit = true
+      this.edit_channel_id = id
+      _apiGet(`/api/v1/channel/channel-info`, {
+        channel_id: id
+      }).then(res => {
+        this.form = res.data
+        this.dialogFormVisible = true
+      })
+    },
 
     setStatus(row, status) {
       this.isLoading = true
@@ -160,7 +191,11 @@ export default {
 
     currentChange(e) {
       this.page = e
+      this.isLoading = true
       this.getChannelsList()
+      this.$nextTick(() => {
+        this.$refs.table.bodyWrapper.scrollTop = 0
+      })
     },
 
     getChannelsList() {
@@ -198,9 +233,18 @@ export default {
     },
 
     onSubmit() {
+      if (this.is_edit) {
+        _apiPost(`/api/v1/channel/${this.edit_channel_id}/update-channel`, this.form).then(res => {
+          this.getChannelsList()
+          this.dialogFormVisible = false
+          this.closeDialog()
+        })
+        return false;
+      }
       _apiPost('/api/v1/channel/add-channel', this.form).then(res => {
         this.getChannelsList()
         this.dialogFormVisible = false
+        this.closeDialog()
       })
     },
 
@@ -210,7 +254,7 @@ export default {
 <style lang="scss" scoped>
 .table-box {
   margin-top: 30px;
-  min-height: 700px;
+  max-height: 80vh;
   border-radius: 5px;
 }
 
