@@ -9,16 +9,17 @@ class ChannelsEntity(Model):
     type = fields.IntField(description="类型", default=1)
     key = fields.CharField(max_length=55, description="key")
     status = fields.IntField(description="状态", default=1)
-    name = fields.CharField(max_length=55, description="名称")
+    name = fields.CharField(max_length=55, description="名称", default="")
     weight = fields.IntField(description="权重", default=100)
     created_time = fields.DatetimeField(auto_now_add=True, description="创建时间")
     test_time = fields.DatetimeField(description="测试时间")
     response_time = fields.IntField(description="响应时间", default=0)
     base_url = fields.CharField(max_length=255, description="base url")
     balance = fields.IntField(description="余额", default=0)
-    balance_update_time = fields.DatetimeField(description="余额更新时间")
+    balance_update_time = fields.DatetimeField(description="余额更新时间", default='')
     models = fields.CharField(max_length=100, description="模型")
     used_quota = fields.IntField(description="已使用额度", default=0)
+    manage_key = fields.CharField(max_length=155, description="管理key", default='')
 
     class Meta:
         table = "channels"

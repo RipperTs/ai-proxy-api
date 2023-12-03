@@ -1,8 +1,6 @@
 import logging
-from typing import List
 
 from peewee import DoesNotExist
-from tortoise.expressions import RawSQL
 
 from application.model.entity.channels_entity import ChannelsEntity
 import httpx
@@ -48,10 +46,17 @@ async def get_channel_list(page=1, limit=30):
     total_count = await query.count()
     for res in results:
         res.created_time = res.created_time.strftime('%Y-%m-%d %H:%M:%S')
+        if res.balance_update_time not in ['', None]:
+            res.balance_update_time = res.balance_update_time.strftime('%Y-%m-%d %H:%M:%S')
     return results, total_count
 
 
 async def get_channel_balance(channel_id: int):
+    """
+    获取渠道余额
+    :param channel_id:
+    :return:
+    """
     balance = 0
     query = ChannelsEntity.filter(id=channel_id)
 
@@ -66,14 +71,50 @@ async def get_channel_balance(channel_id: int):
             response = await client.post(f"{get_base_url(channel.__dict__)}/api/v1/user/admin/balance",
                                          headers={"authorization": "Bearer " + channel.key}, timeout=20)
             if response.status_code != 200:
-                raise AssertionError(f"获取渠道余额失败, 请求状态码: {response.status_code}, 错误信息: {response.text}")
+                raise AssertionError(
+                    f"获取渠道余额失败, 请求状态码: {response.status_code}, 错误信息: {response.aread()}")
 
             response_json = response.json()
             if response_json['statusCode'] != 200:
                 raise AssertionError(f"获取渠道余额失败, 错误信息: {response_json['message']}")
             balance = int((float(response_json['data']['balance']) / 34000) * 100)
-            await query.update(balance=balance)
 
+    if channel.type == 3:
+        #  One API
+        async with httpx.AsyncClient() as client:
+            response = await client.get(f"{get_base_url(channel.__dict__)}/api/status", timeout=20)
+            if response.status_code != 200:
+                raise AssertionError(
+                    f"获取渠道余额失败, 请求状态码: {response.status_code}, 错误信息: {response.aread()}")
+            response_json = response.json()
+            quota_per_unit = response_json['data']['quota_per_unit']
+
+        async with httpx.AsyncClient() as client:
+            response = await client.get(f"{get_base_url(channel.__dict__)}/api/user/self", headers={
+                'authorization': 'Bearer ' + channel.manage_key,
+            }, timeout=20)
+            if response.status_code != 200:
+                raise AssertionError(
+                    f"获取渠道余额失败, 请求状态码: {response.status_code}, 错误信息: {response.aread()}")
+            response_json = response.json()
+            quota = response_json['data']['quota']
+
+        balance = int(round((quota / quota_per_unit), 2) * 100)
+
+    if channel.type == 4:
+        # openai-sb
+        async with httpx.AsyncClient() as client:
+            response = await client.get(f"{get_base_url(channel.__dict__)}/sb-api/user/status?api_key={channel.key}",
+                                        timeout=20)
+            if response.status_code != 200:
+                raise AssertionError(
+                    f"获取渠道余额失败, 请求状态码: {response.status_code}, 错误信息: {response.aread()}")
+            response_json = response.json()
+            balance = int(float(response_json['data']['credit'])) / 100
+
+    # 获取当前时间 格式 yyyy-MM-dd HH:mm:ss
+    now = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+    await query.update(balance=balance, balance_update_time=now)
     return balance
 
 
