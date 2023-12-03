@@ -48,7 +48,9 @@
           align="center"
           width="80">
           <template slot-scope="scope">
-            <span>{{ scope.row.balance / 100 }}</span>
+            <el-tooltip class="item" effect="dark" :content="`更新时间: ${scope.row.balance_update_time}`" placement="top">
+              <span>{{ scope.row.balance / 100 }}</span>
+            </el-tooltip>
           </template>
         </el-table-column>
         <el-table-column
