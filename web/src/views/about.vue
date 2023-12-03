@@ -5,7 +5,7 @@
       <p>✊ 打造统一的AI接口服务中间件, 通过统一的接口, 转发到各个AI接口服务, 从而实现统一管理, 降低接口适配成本.</p>
       <p>💥 接口全部统一继承使用OpenAI的接口规范, 以便于后续模型的迁移, <b>但返回参数需要根据各个接口服务的返回参数进行适配.</b></p>
       <p>✨ 此服务中间件仅做转发, <b>不做计费处理</b>.</p>
-      <p>🤡 GitHub: <a href="https://github.com/RipperTs/ai-proxy-api">https://github.com/RipperTs/ai-proxy-api</a></p>
+      <p>🤡 GitHub: <a href="https://github.com/RipperTs/ai-proxy-api" target="_blank">https://github.com/RipperTs/ai-proxy-api</a></p>
 
       <h3>支持模型</h3>
       <p>✅ 支持官方 <b>Function Calling</b>，一眼辨别真假官方</p>
