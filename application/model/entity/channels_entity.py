@@ -16,8 +16,8 @@ class ChannelsEntity(Model):
     response_time = fields.IntField(description="响应时间", default=0)
     base_url = fields.CharField(max_length=255, description="base url")
     balance = fields.IntField(description="余额", default=0)
-    balance_update_time = fields.DatetimeField(description="余额更新时间", default='')
-    models = fields.CharField(max_length=100, description="模型")
+    balance_update_time = fields.DatetimeField(description="余额更新时间", default="1970-01-01 00:00:00")
+    models = fields.CharField(max_length=550, description="模型", default="")
     used_quota = fields.IntField(description="已使用额度", default=0)
     manage_key = fields.CharField(max_length=155, description="管理key", default='')
 
