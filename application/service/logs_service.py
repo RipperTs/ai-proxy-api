@@ -6,13 +6,16 @@ from application.model.entity.tokens_entity import TokensEntity
 from application.utils.tiktokens import num_tokens_from_string
 
 
-async def get_log_list(page=1, limit=30):
+async def get_log_list(page: int = 1, limit: int = 30):
+    """
+    获取日志列表
+    :param page:
+    :param limit:
+    :return:
+    """
     offset = (page - 1) * limit
-    # 使用filter进行条件过滤，如果不需要过滤条件，则不调用filter
     query = LogsEntity.filter()
-    # 使用offset和limit进行分页
     results = await query.offset(offset).order_by("-id").limit(limit).all()
-    # 获取查询结果总数（用于分页）
     total_count = await query.count()
     for res in results:
         res.created_time = res.created_time.strftime('%Y-%m-%d %H:%M:%S')
@@ -20,6 +23,14 @@ async def get_log_list(page=1, limit=30):
 
 
 async def insert_log(data: dict, model_name: str, channel: dict, token_info: TokensEntity):
+    """
+    新增请求日志
+    :param data:
+    :param model_name:
+    :param channel:
+    :param token_info:
+    :return:
+    """
     try:
         content = ''
         messages = data.get('messages', [])
