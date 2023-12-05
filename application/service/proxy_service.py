@@ -28,7 +28,7 @@ async def do_openai_proxy(request: Request):
     """
     url_path = request.url.path
     headers = dict(request.headers)
-    token_info = await get_token_info(headers['authorization'])
+    token_info = await get_token_info(headers.get('authorization', ''))
     # 获取请求的参数
     data = request.state.request_data
     stream = data.get('stream', False)

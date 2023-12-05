@@ -7,6 +7,9 @@ from application.utils.tiktokens import generate_random_string
 
 
 async def get_token_info(bearer_token) -> TokensEntity:
+    if bearer_token == '' or bearer_token is None:
+        raise AssertionError("鉴权失败: 令牌不存在")
+
     token_with_sk = re.search(r'Bearer (.+)', bearer_token).group(1)
     token_without_sk = token_with_sk.replace("sk-", "")
 

@@ -20,6 +20,7 @@ from application.service.token_service import get_token_info
 
 logger = logging.getLogger(__name__)
 
+
 class ChatMessage(BaseModel):
     role: Literal["user", "assistant", "system"]
     content: str
@@ -58,7 +59,7 @@ async def do_lingshi_qwen_proxy(request: Request):
     data = request.state.request_data
     messages = request.state.request_data.get('messages', [])
     headers = dict(request.headers)
-    token_info = await get_token_info(headers['authorization'])
+    token_info = await get_token_info(headers.get('authorization', ''))
 
     model_name = data.get('model', '')
 
@@ -80,7 +81,7 @@ async def do_lingshi_qwen_proxy(request: Request):
 
     prev_messages = messages[:-1]
     if stream:
-        generate = predict(query,prev_messages, model_name, channel['key'], data.get('temperature', 0.5),
+        generate = predict(query, prev_messages, model_name, channel['key'], data.get('temperature', 0.5),
                            data.get('top_p', 0.9))
         # 记录请求日志
         await insert_log(data, model_name, channel, token_info)
@@ -108,7 +109,7 @@ async def do_lingshi_qwen_proxy(request: Request):
     return Response(model_result.model_dump_json(exclude_unset=True), media_type="application/json")
 
 
-async def predict(query,messages, model_name: str, api_key: str, temperature: float = 0.5,
+async def predict(query, messages, model_name: str, api_key: str, temperature: float = 0.5,
                   top_p: float = 0.9):
     choice_data = ChatCompletionResponseStreamChoice(
         index=0,

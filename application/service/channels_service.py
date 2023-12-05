@@ -25,18 +25,15 @@ def get_base_url(channel):
 
 
 async def get_channel_info(model_name: str) -> dict:
-    try:
-        channel_list = await ChannelsEntity.random_channel_by_model_name(model_name)
-        if len(channel_list) == 0:
-            raise AssertionError("未找到可用的渠道")
-        # todo: 随机选择一个渠道
-        channel = random.choice(channel_list)
-        channel['base_url'] = get_base_url(channel)
-        return channel
-    except DoesNotExist:
-        raise AssertionError(f"渠道不存在")
-    except Exception as e:
-        raise AssertionError(e)
+    if model_name == '':
+        raise AssertionError("模型名称不能为空")
+    channel_list = await ChannelsEntity.random_channel_by_model_name(model_name)
+    if len(channel_list) == 0:
+        raise AssertionError("未找到可用的渠道")
+    # todo: 随机选择一个渠道
+    channel = random.choice(channel_list)
+    channel['base_url'] = get_base_url(channel)
+    return channel
 
 
 async def get_channel_list(page=1, limit=30):
