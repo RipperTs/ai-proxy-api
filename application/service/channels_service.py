@@ -116,11 +116,12 @@ async def get_channel_balance(channel_id: int):
 
 
 async def do_add_channel(data: AddChannelPo):
-    # 检查key 是否存在
     channel_exists = await ChannelsEntity.filter(key=data.key).exists()
     if channel_exists:
         raise AssertionError("渠道key已存在")
-    channel = ChannelsEntity(key=data.key, type=data.type, name=data.name, base_url=data.base_url, models=data.models)
+
+    channel = ChannelsEntity(key=data.key, type=data.type, name=data.name,
+                             base_url=data.base_url, models=data.models, manage_key=data.manage_key, weight=data.weight)
     await channel.save()
     return channel.id
 
@@ -182,5 +183,7 @@ async def do_update_channel(channel_id: int, data: AddChannelPo):
     channel.name = data.name
     channel.base_url = data.base_url
     channel.models = data.models
+    channel.weight = data.weight
+    channel.manage_key = data.manage_key
     await channel.save()
     return channel.id

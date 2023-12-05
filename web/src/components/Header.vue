@@ -232,6 +232,7 @@ export default {
 
 .ribbon-main {
   margin-left: 30px;
+  min-width: 350px;
 
   .menu-item-class {
     font-weight: 500;

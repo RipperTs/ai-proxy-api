@@ -102,6 +102,7 @@ export default {
 .table-box {
   margin-top: 30px;
   border-radius: 5px;
+  min-width: 1280px;
 }
 
 .cursor {

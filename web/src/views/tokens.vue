@@ -40,6 +40,7 @@
           label="到期时间">
         </el-table-column>
         <el-table-column
+          min-width="80"
           label="操作">
           <template slot-scope="scope">
             <el-button type="success" @click="copyKey(scope.row)" size="mini">复制</el-button>
@@ -174,6 +175,7 @@ export default {
 .table-box {
   margin-top: 30px;
   border-radius: 5px;
+  min-width: 1280px;
 }
 
 .cursor {

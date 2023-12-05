@@ -10,7 +10,7 @@ class ChannelsEntity(Model):
     key = fields.CharField(max_length=55, description="key")
     status = fields.IntField(description="状态", default=1)
     name = fields.CharField(max_length=55, description="名称", default="")
-    weight = fields.IntField(description="权重", default=100)
+    weight = fields.IntField(description="权重", default=1)
     created_time = fields.DatetimeField(auto_now_add=True, description="创建时间")
     test_time = fields.DatetimeField(description="测试时间")
     response_time = fields.IntField(description="响应时间", default=0)

@@ -9,3 +9,5 @@ class AddChannelPo(BaseModel):
     name: str
     base_url: Optional[str] = None
     models: str
+    weight: Optional[int] = 1
+    manage_key: Optional[str] = None

@@ -48,8 +48,9 @@
           align="center"
           width="80">
           <template slot-scope="scope">
-            <el-tooltip class="item" effect="dark" :content="`更新时间: ${scope.row.balance_update_time}`" placement="top">
-              <span>{{ scope.row.balance / 100 }}</span>
+            <el-tooltip class="item" effect="dark"
+                        :content="`更新时间: ${scope.row.balance_update_time}`" placement="top">
+              <span style="font-weight: 500;">{{ scope.row.balance / 100 }}</span>
             </el-tooltip>
           </template>
         </el-table-column>
@@ -69,6 +70,7 @@
           </template>
         </el-table-column>
         <el-table-column
+          min-width="300"
           label="操作">
           <template slot-scope="scope">
             <el-button type="success" @click="testChannel(scope.row)"
@@ -111,14 +113,25 @@
 
         <el-form-item label="包含模型" :label-width="formLabelWidth">
           <el-input v-model="form.models" :rows="6" style="width: 560px;" type="textarea"
-                    class="input-width"></el-input>
+                    class="input-width"
+                    placeholder="接口参数中的 model 值,多个值使用,分隔"></el-input>
+        </el-form-item>
+        <el-form-item label="权 重" :label-width="formLabelWidth">
+          <el-input-number v-model="form.weight" :min="1" :max="1000"
+                           label="描述文字"></el-input-number>
         </el-form-item>
         <el-form-item label="鉴权秘钥" :label-width="formLabelWidth">
-          <el-input v-model="form.key" class="input-width"></el-input>
+          <el-input v-model="form.key" class="input-width"
+                    placeholder="实际请求的key值, 如:sk-xxxxx"></el-input>
+        </el-form-item>
+        <el-form-item label="管理秘钥" :label-width="formLabelWidth" v-if="form.type === 3">
+          <el-input v-model="form.manage_key" class="input-width"
+                    placeholder="用于查询余额, 可为空"></el-input>
         </el-form-item>
         <el-form-item label="请求地址" :label-width="formLabelWidth">
           <el-input v-model="form.base_url" :disabled="form.type === 5"
-                    class="input-width"></el-input>
+                    class="input-width"
+                    placeholder="转发的目标接口地址,如: https://api.openai.com"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -147,6 +160,8 @@ export default {
         name: '',
         type: 1,
         models: 'gpt-3.5-turbo,gpt-3.5-turbo-0301,gpt-3.5-turbo-0613,gpt-3.5-turbo-16k,gpt-3.5-turbo-16k-0613,gpt-3.5-turbo-instruct,text-embedding-ada-002,text-davinci-003,text-davinci-002,gpt-3.5-turbo-1106',
+        weight: 1,
+        manage_key: '',
       },
       formLabelWidth: '100px',
       is_edit: false,
@@ -168,6 +183,8 @@ export default {
         name: '',
         type: 1,
         models: 'gpt-3.5-turbo,gpt-3.5-turbo-0301,gpt-3.5-turbo-0613,gpt-3.5-turbo-16k,gpt-3.5-turbo-16k-0613,gpt-3.5-turbo-instruct,text-embedding-ada-002,text-davinci-003,text-davinci-002,gpt-3.5-turbo-1106',
+        weight: 1,
+        manage_key:'',
       }
       this.edit_channel_id = 0
     },
@@ -258,6 +275,7 @@ export default {
   margin-top: 30px;
   max-height: 80vh;
   border-radius: 5px;
+  min-width: 1280px;
 }
 
 .cursor {
