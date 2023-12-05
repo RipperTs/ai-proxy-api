@@ -30,8 +30,8 @@ async def get_channel_info(model_name: str) -> dict:
     channel_list = await ChannelsEntity.random_channel_by_model_name(model_name)
     if len(channel_list) == 0:
         raise AssertionError("未找到可用的渠道")
-    # todo: 随机选择一个渠道
-    channel = random.choice(channel_list)
+    # 按权重随机选择一个渠道
+    channel = random.choices(channel_list, weights=[channel['weight'] for channel in channel_list])[0]
     channel['base_url'] = get_base_url(channel)
     return channel
 
